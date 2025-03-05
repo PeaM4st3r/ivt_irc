@@ -1,5 +1,5 @@
 <?php
-require "language.php";
+require "./language.php";
 
 function setLanguageButtonSelected($testLanguage) {
     if ($_SESSION["lang"] == $testLanguage) {
