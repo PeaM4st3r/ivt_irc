@@ -27,7 +27,7 @@ setInterval(updateClockField, 1000);
 
 //Updating the chat
 const chatContainer = document.getElementById("chat");
+/* chatContainer.appendChild(chat.createChatElement());
 chatContainer.appendChild(chat.createChatElement());
 chatContainer.appendChild(chat.createChatElement());
-chatContainer.appendChild(chat.createChatElement());
-chatContainer.appendChild(chat.createChatElement());
+chatContainer.appendChild(chat.createChatElement()); */

@@ -154,6 +154,7 @@ main {
 
 div#chat_window {
     display: block;
+    position: relative;
     flex: 5;
 }
 
@@ -201,6 +202,29 @@ div#channel_window {
     flex: 0;
     min-width: 300px;
     border-right: 4px solid $border_main;
+}
+
+
+// Message input
+div#message_input_container {
+    display: flex;
+    position: absolute;
+    bottom: 2px;
+    left: 20px;
+    right: 20px;
+
+    textarea#message_input {
+        flex: 1;
+        font-size: 1.1em;
+
+        background-color: $background_dark;
+        color: $text_white;
+        border: 2px solid $border_main;
+        border-radius: 6px;
+
+        overflow: hidden auto;
+        resize: none;
+    }
 }
 
 

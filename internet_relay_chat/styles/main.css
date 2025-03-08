@@ -110,6 +110,7 @@ main h2 {
 
 div#chat_window {
   display: block;
+  position: relative;
   flex: 5;
 }
 
@@ -153,6 +154,24 @@ div#channel_window {
   flex: 0;
   min-width: 300px;
   border-right: 4px solid rgb(40, 41, 43);
+}
+
+div#message_input_container {
+  display: flex;
+  position: absolute;
+  bottom: 2px;
+  left: 20px;
+  right: 20px;
+}
+div#message_input_container textarea#message_input {
+  flex: 1;
+  font-size: 1.1em;
+  background-color: rgb(12, 13, 15);
+  color: rgb(250, 250, 250);
+  border: 2px solid rgb(40, 41, 43);
+  border-radius: 6px;
+  overflow: hidden auto;
+  resize: none;
 }
 
 footer {

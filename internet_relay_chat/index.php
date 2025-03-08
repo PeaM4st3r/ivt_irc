@@ -1,10 +1,23 @@
 <?php
 require "./language.php";
+require "./db_handler.php";
 
+// Helper layout functions
 function setLanguageButtonSelected($testLanguage) {
     if ($_SESSION["lang"] == $testLanguage) {
         echo "class='b_sel'";
     }
+}
+
+
+// Database interaction
+$db_config = parse_ini_file("./irc_cfg.ini");
+
+$irc_pdo = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
+    $db_config["irc_db_username"], $db_config["irc_db_password"]);
+
+if ($irc_pdo) {
+    //$messages = DBH\getChatMessages($irc_pdo);
 }
 ?>
 
@@ -55,6 +68,10 @@ function setLanguageButtonSelected($testLanguage) {
                             What the hell does that mean?
                         </div>
                     </div>
+                </div>
+                <div id="message_input_container">
+                    <textarea id="message_input" name="message_input_field" placeholder="Send message to #"></textarea>
+                    <button type="submit">Send</button>
                 </div>
             </div>
         </main>
