@@ -1,6 +1,7 @@
 <?php
 namespace DBH;
 use PDO;
+use PDOException;
 
 const QUERY_GET_MESSAGE = "SELECT users.username, messages.msg_text, messages.time_sent
     FROM (messages INNER JOIN users ON (messages.fk_author = users.pk_id))
@@ -20,7 +21,7 @@ function connectToDB(string $dbServer, string $dbName, string $dbUser, ?string $
 {
     try {
         $pdo = new PDO("mysql:host=$dbServer; dbname=$dbName", $dbUser, $dbPass);
-    } catch (\PDOException $exception) {
+    } catch (PDOException $exception) {
         error_log("Unable to establish connection to the IRC database for the following reason:" . $exception->getMessage());
         return false;
     }
@@ -35,7 +36,7 @@ function connectToDB(string $dbServer, string $dbName, string $dbUser, ?string $
  * @return array Returns a multi-dimensional 0-indexed array where each sub-array contains associative message information.
  *  The keys are: `username`, `msg_text`, `time_sent`
  */
-function getChatMessages(PDO &$pdo, int $messageCount = 50, int $messageOffset = 0): array
+function getChatMessages(PDO &$pdo, int $messageCount = 20, int $messageOffset = 0): array
 {
     $msgCountNormalized = max($messageCount - 1, 1);
 

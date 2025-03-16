@@ -1,7 +1,6 @@
 import * as chat from "./chat.js";
 import * as lang from "./lang.js";
 
-
 // Registering DOM events
 const buttonLanguage_CS = document.getElementById("b_lang_cs"); 
 const buttonLanguage_EN = document.getElementById("b_lang_en");
@@ -25,9 +24,10 @@ function updateClockField(){
 updateClockField();
 setInterval(updateClockField, 1000);
 
+
 //Updating the chat
+const data = chat.fetchMessageSign();
+console.log(data);
+
 const chatContainer = document.getElementById("chat");
-/* chatContainer.appendChild(chat.createChatElement());
 chatContainer.appendChild(chat.createChatElement());
-chatContainer.appendChild(chat.createChatElement());
-chatContainer.appendChild(chat.createChatElement()); */

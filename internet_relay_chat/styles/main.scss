@@ -158,11 +158,21 @@ div#chat_window {
     flex: 5;
 }
 
-// Chat and chat elements
+div#channel_window {
+    display: block;
+    flex: 0;
+    min-width: 300px;
+    border-right: 4px solid $border_main;
+}
+
+// Channel container and channel elements
+
+
+// Chat container and chat elements
 div#chat {
     display: block;
     overflow: hidden auto;
-    max-height: calc(100% - 30px); //FIND A WAY TO FIX THIS
+    max-height: calc(100% - 30px); //Still broken ffs
 }
 
 .chat_element {
@@ -198,20 +208,11 @@ div#chat {
     margin: 0 4px 0;
 }
 
-div#channel_window {
-    flex: 0;
-    min-width: 300px;
-    border-right: 4px solid $border_main;
-}
 
 
 // Message input
 div#message_input_container {
     display: flex;
-    position: absolute;
-    bottom: 2px;
-    left: 20px;
-    right: 20px;
 
     textarea#message_input {
         flex: 1;

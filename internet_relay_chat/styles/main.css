@@ -114,6 +114,13 @@ div#chat_window {
   flex: 5;
 }
 
+div#channel_window {
+  display: block;
+  flex: 0;
+  min-width: 300px;
+  border-right: 4px solid rgb(40, 41, 43);
+}
+
 div#chat {
   display: block;
   overflow: hidden auto;
@@ -150,18 +157,8 @@ div#chat {
   margin: 0 4px 0;
 }
 
-div#channel_window {
-  flex: 0;
-  min-width: 300px;
-  border-right: 4px solid rgb(40, 41, 43);
-}
-
 div#message_input_container {
   display: flex;
-  position: absolute;
-  bottom: 2px;
-  left: 20px;
-  right: 20px;
 }
 div#message_input_container textarea#message_input {
   flex: 1;

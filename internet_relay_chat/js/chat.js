@@ -1,3 +1,5 @@
+const urlRequestHandler = "handlers\\request_handler.php";
+
 export function createChatElement() {
     const username = "NONE";
     const postingTime = "12:00";
@@ -19,4 +21,32 @@ Facilisis facilisis justo urna aliquet mus cras. Vel scelerisque inceptos; hendr
 
     let doc = new DOMParser().parseFromString(chatElementString, "text/html");
     return doc.body.firstChild;
+}
+
+
+/**
+ * Sends a fetch request to the server, asking for the current message sign in the channel.
+ * @returns A json object containing the data, or false if the request fails.
+ */
+export async function fetchMessageSign() {
+    try {
+        const response = await fetch(urlRequestHandler, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                command: "getSign" // This will tell the server which function to run
+            })
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch message sign - response code wasn't 'OK'");
+        }
+
+        const responseText = await response.json();
+        console.log(responseText);
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
 }

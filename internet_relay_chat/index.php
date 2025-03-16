@@ -1,6 +1,6 @@
 <?php
-require "./language.php";
-require "./db_handler.php";
+require ".\\language.php";
+require ".\\handlers\\db_handler.php";
 
 // Helper layout functions
 function setLanguageButtonSelected($testLanguage) {
@@ -13,9 +13,10 @@ function setLanguageButtonSelected($testLanguage) {
 // Database interaction
 $db_config = parse_ini_file("./irc_cfg.ini");
 
-$irc_pdo = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
+$irc_pdo = false;
+/* $irc_pdo = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
     $db_config["irc_db_username"], $db_config["irc_db_password"]);
-
+ */
 if ($irc_pdo) {
     //$messages = DBH\getChatMessages($irc_pdo);
 }
@@ -45,7 +46,14 @@ if ($irc_pdo) {
         <main>
             <div id="channel_window">
                 <h2><?php echo getLan("channel_container")?></h2>
-                
+                <div id="channels">
+                    <div class="channel_element">
+                        <p>Channel 1</p>
+                    </div>
+                    <div class="channel_element">
+                        <p>Channel 2</p>
+                    </div>
+                </div>
             </div>
             <div id="chat_window">
                 <h2>|current_chat_name|</h2>
