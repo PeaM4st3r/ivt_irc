@@ -10,6 +10,7 @@ function setLanguageButtonSelected($testLanguage) {
 }
 
 
+
 // Database interaction
 $db_config = parse_ini_file("./irc_cfg.ini");
 

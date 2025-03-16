@@ -1,5 +1,6 @@
 const urlRequestHandler = "handlers\\request_handler.php";
 
+
 export function createChatElement() {
     const username = "NONE";
     const postingTime = "12:00";
@@ -29,22 +30,23 @@ Facilisis facilisis justo urna aliquet mus cras. Vel scelerisque inceptos; hendr
  * @returns A json object containing the data, or false if the request fails.
  */
 export async function fetchMessageSign() {
+    const body = {
+        command: "getSign"
+    }
+
     try {
         const response = await fetch(urlRequestHandler, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json; charset=utf-8"
             },
-            body: JSON.stringify({
-                command: "getSign" // This will tell the server which function to run
-            })
+            body: JSON.stringify(body)
         });
         if (!response.ok) {
             throw new Error("Failed to fetch message sign - response code wasn't 'OK'");
         }
 
-        const responseText = await response.json();
-        console.log(responseText);
+        return await response.json();
     } catch (error) {
         console.log(error);
         return false;

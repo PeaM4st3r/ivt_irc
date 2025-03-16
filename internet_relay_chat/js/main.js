@@ -24,10 +24,8 @@ function updateClockField(){
 updateClockField();
 setInterval(updateClockField, 1000);
 
-
 //Updating the chat
-const data = chat.fetchMessageSign();
-console.log(data);
+chat.fetchMessageSign().then((data)=>console.log(data));
 
 const chatContainer = document.getElementById("chat");
 chatContainer.appendChild(chat.createChatElement());
