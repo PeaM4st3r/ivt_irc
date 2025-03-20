@@ -26,12 +26,13 @@ Facilisis facilisis justo urna aliquet mus cras. Vel scelerisque inceptos; hendr
 
 
 /**
- * Sends a fetch request to the server, asking for the current message sign in the channel.
- * @returns A json object containing the data, or false if the request fails.
+ * Sends a fetch request to the server, asking for the current signature in the channel.
+ * @returns A json object containing the data, or false if the request fails for any reason.
  */
 export async function fetchMessageSign() {
     const body = {
-        command: "getSign"
+        command: "getSign",
+        channel: "institut"
     }
 
     try {
@@ -42,11 +43,10 @@ export async function fetchMessageSign() {
             },
             body: JSON.stringify(body)
         });
-        if (!response.ok) {
-            throw new Error("Failed to fetch message sign - response code wasn't 'OK'");
-        }
+        if (!response.ok) throw new Error("Failed to fetch message sign - response code wasn't 'OK'");
 
-        return await response.json();
+        const responseBody = await response.json();
+        return responseBody;
     } catch (error) {
         console.log(error);
         return false;

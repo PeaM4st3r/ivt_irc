@@ -3,12 +3,25 @@ namespace DBH;
 use PDO;
 use PDOException;
 
+
+// MARK: Constants
 const QUERY_GET_MESSAGE = "SELECT users.username, messages.msg_text, messages.time_sent
     FROM (messages INNER JOIN users ON (messages.fk_author = users.pk_id))
     ORDER BY time_sent ASC
     LIMIT :msgOffset, :msgCount";
 
+const QGET_MESSAGES_IN_CHANNEL = "SELECT users.username, messages.msg_text";
 
+/** Returns the msg_text and time_sent attributes from the newest message in the provided channel.
+ */
+const QGET_LATEST_MESSAGE_IN_CHANNEL = "SELECT messages.msg_text, messages.time_sent FROM messages
+    WHERE messages.fk_channel = (SELECT channels.pk_id FROM channels WHERE channels.channel_name = :channelName)
+    ORDER BY messages.time_sent DESC
+    LIMIT 1";
+
+
+
+// MARK: Function declarations
 /** Attempts to connect to a database.
  * @param string $dbServer The server address to connect to
  * @param string $dbName The name of the database to connect to
@@ -27,6 +40,24 @@ function connectToDB(string $dbServer, string $dbName, string $dbUser, ?string $
     }
 
     return $pdo;
+}
+
+/** Gets the newest message in the current channel and returns its hash.
+ * @param PDO &$pdo A reference to the PDO object.
+ * @param string $channelName The name of the channel to get the signature from. This name must be exact!
+ * @return string Returns an sha256 hash upon success, otherwise returns an empty string.
+ */
+function getChannelSignHash(PDO &$pdo, string $channelName): string {
+    $statement = $pdo->prepare(QGET_LATEST_MESSAGE_IN_CHANNEL);
+    if(!$statement) return "";
+    $statement->bindValue(":channelName", $channelName);
+
+    if(!$statement->execute() || !$statement->columnCount()) return "";
+    $queryData = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if(!isset($queryData[0])) return "";
+
+    $sign = hash("sha256", sprintf("%s/%s", $queryData["time_sent"], $queryData["msg_text"]));
+    return $sign;
 }
 
 /** Gets a range of chat messages sorted by date in ascending order.

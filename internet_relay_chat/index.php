@@ -1,6 +1,5 @@
 <?php
 require ".\\language.php";
-require ".\\handlers\\db_handler.php";
 
 // Helper layout functions
 function setLanguageButtonSelected($testLanguage) {
@@ -12,7 +11,7 @@ function setLanguageButtonSelected($testLanguage) {
 
 
 // Database interaction
-$db_config = parse_ini_file("./irc_cfg.ini");
+
 
 $irc_pdo = false;
 /* $irc_pdo = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
@@ -80,7 +79,7 @@ if ($irc_pdo) {
                 </div>
                 <div id="message_input_container">
                     <textarea id="message_input" name="message_input_field" placeholder="Send message to #"></textarea>
-                    <button type="submit">Send</button>
+                    <button type="submit" id="b_chat_send">Send</button>
                 </div>
             </div>
         </main>
