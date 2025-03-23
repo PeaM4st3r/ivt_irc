@@ -3,7 +3,9 @@
 $langArray = [
     "channel_container" => "Channels",
     "footer_author" => "Created by",
-    "footer_for" => "Final project for RG Prostějov"
+    "footer_for" => "Final project for RG Prostějov",
+
+    "button_send_message" => "Send"
 ];
 
 ?>

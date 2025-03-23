@@ -5,12 +5,15 @@ use PDOException;
 
 
 // MARK: Constants
-const QUERY_GET_MESSAGE = "SELECT users.username, messages.msg_text, messages.time_sent
+
+/**
+ * Queries messages in the given channel, sorted from OLDEST to NEWEST and limited by the message count.
+ */
+const QGET_MESSAGES_IN_CHANNEL = "SELECT users.username, messages.msg_text, messages.time_sent
     FROM (messages INNER JOIN users ON (messages.fk_author = users.pk_id))
+    WHERE messages.fk_channel = (SELECT channels.pk_id FROM channels WHERE channels.channel_name = :channelName)
     ORDER BY time_sent ASC
     LIMIT :msgOffset, :msgCount";
-
-const QGET_MESSAGES_IN_CHANNEL = "SELECT users.username, messages.msg_text";
 
 /** Returns the msg_text and time_sent attributes from the newest message in the provided channel.
  */
@@ -60,21 +63,23 @@ function getChannelSignHash(PDO &$pdo, string $channelName): string {
     return $sign;
 }
 
-/** Gets a range of chat messages sorted by date in ascending order.
- * @param PDO &$pdo A reference to the PDO object (see `connectToDB()`)
+/** Gets the messages in the provided chat channel. Can set a message limit and message offset to load older messages.
+ * @param PDO &$pdo A reference to the PDO object (see `connectToDB()`).
+ * @param string $channelName The chat channel to query the messages from.
  * @param int $messageCount The number of messages to retrieve in the query. 50 by default.
  * @param int $messageOffset By default, the query begins with the newest message. This lets you start from older messages.
  * @return array Returns a multi-dimensional 0-indexed array where each sub-array contains associative message information.
- *  The keys are: `username`, `msg_text`, `time_sent`
+ *  The keys are: `username`, `msg_text`, `time_sent`. The messages are ordered from OLDEST to NEWEST.
  */
-function getChatMessages(PDO &$pdo, int $messageCount = 20, int $messageOffset = 0): array
+function getChatMessages(PDO &$pdo, string $channelName, int $messageOffset = 0, int $messageCount = 50): array
 {
     $msgCountNormalized = max($messageCount - 1, 1);
 
-    $statement = $pdo->prepare(QUERY_GET_MESSAGE);
+    $statement = $pdo->prepare(QGET_MESSAGES_IN_CHANNEL);
     if (!$statement) return array();
     $statement->bindValue(":msgOffset", (int)$messageOffset, PDO::PARAM_INT);
     $statement->bindValue(":msgCount", (int)$msgCountNormalized, PDO::PARAM_INT);
+    $statement->bindValue(":channelName", $channelName);
     
     if (!$statement->execute() || !$statement->columnCount()) {
         return array();

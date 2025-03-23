@@ -15,13 +15,16 @@ $responseData;
 
 // Connect to IRC database
 $db_config = parse_ini_file("./../irc_cfg.ini");
-$irc_db = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
+$pdo_irc = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
     $db_config["irc_db_username"], $db_config["irc_db_password"]);
 
 
 switch ($request["command"]) {
-    case "getSign": // Returns the sign of the current channel
-        $responseData = DBH\getChannelSignHash($irc_db, $request["channel"]);
+    case "getSign": // Returns the signature of the current channel.
+        $responseData = DBH\getChannelSignHash($pdo_irc, $request["channel"]);
+        break;
+    case "getChat": // Returns an associative array of chat messages in the current channel.
+        $responseData = DBH\getChatMessages($pdo_irc, $request["channel"], $request["offset"]);
         break;
     default:
         $responseData = array("Unknown command received!");

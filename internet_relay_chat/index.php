@@ -56,30 +56,21 @@ if ($irc_pdo) {
                 </div>
             </div>
             <div id="chat_window">
-                <h2>|current_chat_name|</h2>
+                <h2>institut</h2>
                 <div id="chat">
-                    <div class="chat_element">
+                    <!-- <div class="chat_element">
                         <div class="chat_element_author">
-                            <span class="chat_time_style">@12:00 </span>
                             <p>mrFitness</p>
+                            <span class="chat_time_style">@12:00 </span>
                         </div>
                         <div class="chat_element_content">The fitness gram pacer test is a multi-stage aerobic capacity test that gets
                             progressively more difficult as it continues.
                         </div>
-                    </div>
-                    <div class="chat_element">
-                        <div class="chat_element_author">
-                            <span class="chat_time_style">@12:00 </span>
-                            <p>slugger2001</p>
-                        </div>
-                        <div class="chat_element_content">
-                            What the hell does that mean?
-                        </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div id="message_input_container">
                     <textarea id="message_input" name="message_input_field" placeholder="Send message to #"></textarea>
-                    <button type="submit" id="b_chat_send">Send</button>
+                    <button type="submit" id="b_chat_send"><?php echo getLan("button_send_message")?></button>
                 </div>
             </div>
         </main>

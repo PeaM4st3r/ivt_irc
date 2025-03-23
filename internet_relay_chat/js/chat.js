@@ -2,23 +2,77 @@ const urlRequestHandler = "handlers\\request_handler.php";
 var localChatSignature = 0;
 
 
-export function createChatElement() {
-    const username = "NONE";
-    const postingTime = "12:00";
-    const content = `Lorem ipsum odor amet, consectetuer adipiscing elit. Enim nullam tellus lectus vehicula sed bibendum integer quisque. Etiam placerat nam; condimentum dapibus fames tellus. Natoque lectus consequat eget sodales purus nibh ligula et. Ante pellentesque maximus velit luctus augue montes pharetra. Feugiat mi dapibus lobortis aliquam malesuada. Quam sed convallis hac turpis euismod tortor. Placerat dictum mus turpis euismod; urna aptent metus. Nostra varius diam ultrices gravida gravida mollis odio consectetur nec. Diam turpis elit pharetra metus etiam parturient nisl accumsan.
+// MARK: Server communication
+/**
+ * Sends a fetch request to the server, asking for the current signature in the channel.
+ * @returns {Promise|false} A Promise from response.json() or false if the request fails.
+ */
+export async function fetchMessageSign() {
+    const body = {
+        command: "getSign",
+        channel: "institut"
+    }
 
-Malesuada ex venenatis id tincidunt lectus leo conubia. Gravida conubia adipiscing congue nisi maximus semper lectus vestibulum? Etiam tortor cubilia vitae natoque arcu; taciti aliquet. Lorem nisi senectus sollicitudin facilisi, accumsan aliquet molestie arcu. Vitae blandit amet posuere sagittis vitae. Suspendisse neque suscipit sollicitudin facilisis potenti fermentum finibus laoreet tempor. Efficitur semper finibus consectetur pretium ante himenaeos rhoncus. Nisi vitae nam tincidunt dui mollis sociosqu sociosqu primis.
+    try {
+        const request = await fetch(urlRequestHandler, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(body)
+        });
+        if (!request.ok) throw new Error("Failed to fetch message sign - HTTP wasn't 'OK'");
 
-Praesent elit ligula purus auctor feugiat. Elit amet dapibus libero massa imperdiet id dictumst. Per ligula cubilia ex; volutpat ad fusce auctor. Tristique velit lacus dictum maecenas nisi inceptos suscipit; dapibus nunc. Quisque cras curabitur a aenean netus non. Sit quam a pulvinar sagittis molestie metus habitasse iaculis eleifend.
+        return await request.json();
+    } catch (error) {
+        console.log("Couldn't fetch message signature: " + error);
+        return false;
+    }
+}
 
-Mattis dapibus nullam mattis habitasse sodales quam. Tempor pellentesque sagittis at magnis sed hac, quisque nam. Vel metus cursus luctus adipiscing enim nisl eu, molestie sed. Rutrum himenaeos iaculis posuere non class tristique ut. Non convallis ipsum ornare litora malesuada; efficitur phasellus. Consectetur a mollis molestie duis habitasse penatibus turpis bibendum. Ultrices erat aliquet aenean molestie pharetra.
 
-Facilisis facilisis justo urna aliquet mus cras. Vel scelerisque inceptos; hendrerit dui vehicula tempor. Nunc porta malesuada ut eu praesent sed. Vivamus lacinia fermentum aptent ac egestas quam dolor auctor dictum? Eget magna facilisi magna sollicitudin montes. Curae felis nisi auctor cras ligula. Proin lectus ligula ullamcorper penatibus inceptos eros adipiscing mus quis. Sodales laoreet vulputate suspendisse pretium dui lacinia a convallis. Curae sem eros tempus ligula inceptos malesuada.`;
+/**
+ * Sends a fetch request to the server, asking for messages in the current channel.
+ * @returns {Promise<any>|false} A promise resolving into a JSON object, or false if the fetch fails.
+ */
+export async function fetchChatMessages() {
+    const body = {
+        command: "getChat",
+        channel: "institut",
+        offset: 0
+    }
 
+    try {
+        const request = await fetch(urlRequestHandler, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify(body)
+        });
+        if (!request.ok) throw new Error("Failed to fetch chat messages - HTTP wasn't 'OK'");
+
+        return await request.json();
+    } catch (error) {
+        console.log("Couldn't fetch chat messages: " + error);
+        return false;
+    }
+}
+
+
+// MARK: Chat rendering
+/**
+ * Creates (and returns) a new div structured as a chat message.
+ * @param {string} username Sets the username of the person that sent the message.
+ * @param {string} sentTime Sets the time of the user sending the message.
+ * @param {string} msgText The content of the message.
+ * @returns A div of class `chat_element` to be appended to the chat container element.
+ */
+function createChatElement(username, sentTime, msgText) {
     const chatElementString = `<div class='chat_element'>
-        <div class='chat_element_author'><span class='chat_time_style'>@${postingTime} </span>
-        <p>${username}</p></div>
-        <div class='chat_element_content'>${content}</div>
+        <div class='chat_element_author'><p>${username}</p>
+        <span class='chat_time_style'>@${sentTime}</span></div>
+        <div class='chat_element_content'>${msgText}</div>
     </div>`;
 
     let doc = new DOMParser().parseFromString(chatElementString, "text/html");
@@ -27,42 +81,46 @@ Facilisis facilisis justo urna aliquet mus cras. Vel scelerisque inceptos; hendr
 
 
 /**
- * Sends a fetch request to the server, asking for the current signature in the channel.
- * @returns A Promise from response.json() or false if the request fails.
+ * Calls fetchChatMessages() and, upon success, loads the result into the chat container.
+ * @param {HTMLElement} chatContainer The container of the chat messages.
+ * @returns If the chat messages fetch fails.
  */
-export async function fetchMessageSign() {
-    const body = {
-        command: "getSign",
-        channel: "institu"
-    }
+function fetchChatMessagesWrapper(chatContainer) {
+    const chatMessagesPromise = fetchChatMessages();
+    if(!chatMessagesPromise) return;
+    
+    chatMessagesPromise.then((messages) => {
+        chatContainer.innerHTML = "";
+        const chatMessageFormat = {
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit"
+        };
 
-    try {
-        // Fetch request
-        const response = await fetch(urlRequestHandler, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            body: JSON.stringify(body)
+        messages.forEach(message => {
+            const msgDatetime = new Date(message["time_sent"]);
+            const msgDateFormatted = msgDatetime.toLocaleString("en-GB", chatMessageFormat);
+            chatContainer.appendChild(createChatElement(message["username"], msgDateFormatted, message["msg_text"]));
         });
-        if (!response.ok) throw new Error("Failed to fetch message sign - response code wasn't 'OK'");
-
-        // Processing response
-        return await response.json();
-    } catch (error) {
-        console.log(error);
-        return false;
-    }
+    });
 }
+
 
 /**
  * The main chat update function. This should run in an interval.
  */
 export function main() {
-    fetchMessageSign().then((signature) => {
-        if (localChatSignature != signature) {
-            localChatSignature = signature;
-            console.log("Updating chat - new signature: " + signature);
-        }
+    const msgSignaturePromise =  fetchMessageSign();
+    const chatContainer = arguments[0];
+    if(!msgSignaturePromise) return;
+
+    msgSignaturePromise.then((signature) => {
+        if (localChatSignature == signature) return;
+        localChatSignature = signature;
+        console.log("Updating chat - new signature: " + signature);
+
+        fetchChatMessagesWrapper(chatContainer);
     });
 }

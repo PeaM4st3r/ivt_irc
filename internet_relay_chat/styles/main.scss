@@ -18,7 +18,9 @@ $button_text_link: rgb(255, 208, 0);
 @mixin hover-blink-anim($name, $baseColor, $blinkColor) {
     @keyframes #{$name} {
         0% { color: $blinkColor; }
-        50% { color: $baseColor; }
+        25% { color: $baseColor; }
+        50% { color: $blinkColor; }
+        75% { color: $baseColor; }
         100% { color: $blinkColor; }
     }
 }
@@ -58,12 +60,13 @@ body {
     bottom: 0;
     right: 0;
 
+    // first gradient: line segments, second gradient: pixels
     background: linear-gradient(color.adjust($background_scanlines, $alpha: -0.8) 50%,
         color.adjust($background_scanlines, $alpha: -0.98) 50%),
     linear-gradient(90deg, color.adjust(#ff0000, $alpha: -0.94),
         color.adjust(#00ff00, $alpha: -0.98),
         color.adjust(#0000ff, $alpha: -0.94));
-    background-size: 100% 2px, 4px 100%;
+    background-size: 100% 3px, 4px 100%;
 
     z-index: 1;
     pointer-events: none;
@@ -127,7 +130,7 @@ div#language_option_container {
         }
 
         &:hover {
-            animation: button_hover 0.16s step-end;
+            animation: button_hover 0.25s step-end;
             animation-fill-mode: forwards;
         }
     }
@@ -177,8 +180,8 @@ div#chat {
 
 .chat_element {
     background-color: $background_dark;
-    margin: 2px 0;
-    padding: 2px;
+    margin: 4px 0;
+    padding: 2px 4px;
     border: none;
 
     display: flex;
@@ -188,24 +191,28 @@ div#chat {
 .chat_element_author {
     color: $text_chat_author;
     display: flex;
-    flex: 0 1 240px;
+    flex: 0 1 300px;
     flex-direction: row;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+
     justify-content: space-between;
+    align-items: center;
 
     p {
-        margin: 0;
+        margin: 2px 0;
     }
 
     .chat_time_style {
         color: $text_chat_time;
+        font-size: 0.8rem;
+        margin: 2px 0;
     }
 }
 
 .chat_element_content {
     color: $text_white;
     flex: 1;
-    margin: 0 4px 0;
+    margin: 2px 0 2px 8px;
 }
 
 
@@ -250,7 +257,7 @@ footer {
         @include hover-blink-anim("link_hover", $button_text, $button_text_link);
 
         &:hover {
-            animation: link_hover 0.16s step-end;
+            animation: link_hover 0.25s step-end;
             animation-fill-mode: forwards;
         }
     }
