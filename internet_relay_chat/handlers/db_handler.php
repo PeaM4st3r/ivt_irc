@@ -54,9 +54,9 @@ function getChannelSignHash(PDO &$pdo, string $channelName): string {
 
     if(!$statement->execute() || !$statement->columnCount()) return "";
     $queryData = $statement->fetchAll(PDO::FETCH_ASSOC);
-    if(!isset($queryData[0])) return "";
+    if(!$messageData = $queryData[0]) return "";
 
-    $sign = hash("sha256", sprintf("%s/%s", $queryData["time_sent"], $queryData["msg_text"]));
+    $sign = hash("sha256", sprintf("%s/%s", $messageData["time_sent"], $messageData["msg_text"]));
     return $sign;
 }
 

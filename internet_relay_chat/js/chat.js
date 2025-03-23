@@ -1,4 +1,5 @@
 const urlRequestHandler = "handlers\\request_handler.php";
+var localChatSignature = 0;
 
 
 export function createChatElement() {
@@ -27,15 +28,16 @@ Facilisis facilisis justo urna aliquet mus cras. Vel scelerisque inceptos; hendr
 
 /**
  * Sends a fetch request to the server, asking for the current signature in the channel.
- * @returns A json object containing the data, or false if the request fails for any reason.
+ * @returns A Promise from response.json() or false if the request fails.
  */
 export async function fetchMessageSign() {
     const body = {
         command: "getSign",
-        channel: "institut"
+        channel: "institu"
     }
 
     try {
+        // Fetch request
         const response = await fetch(urlRequestHandler, {
             method: "POST",
             headers: {
@@ -45,10 +47,22 @@ export async function fetchMessageSign() {
         });
         if (!response.ok) throw new Error("Failed to fetch message sign - response code wasn't 'OK'");
 
-        const responseBody = await response.json();
-        return responseBody;
+        // Processing response
+        return await response.json();
     } catch (error) {
         console.log(error);
         return false;
     }
+}
+
+/**
+ * The main chat update function. This should run in an interval.
+ */
+export function main() {
+    fetchMessageSign().then((signature) => {
+        if (localChatSignature != signature) {
+            localChatSignature = signature;
+            console.log("Updating chat - new signature: " + signature);
+        }
+    });
 }

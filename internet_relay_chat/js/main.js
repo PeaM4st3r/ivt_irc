@@ -25,10 +25,7 @@ updateClockField();
 setInterval(updateClockField, 1000);
 
 //Updating the chat
-const buttonChat_SendMsg = document.getElementById("b_chat_send");
-buttonChat_SendMsg.addEventListener("click", ()=>{ // debug
-    console.log(chat.fetchMessageSign());
-});
+setInterval(chat.main, 5000);
 
 const chatContainer = document.getElementById("chat");
 chatContainer.appendChild(chat.createChatElement());
