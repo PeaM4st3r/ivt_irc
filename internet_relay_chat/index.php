@@ -1,25 +1,6 @@
 <?php
 require ".\\language.php";
 
-// Helper layout functions
-function setLanguageButtonSelected($testLanguage) {
-    if ($_SESSION["lang"] == $testLanguage) {
-        echo "class='b_sel'";
-    }
-}
-
-
-
-// Database interaction
-
-
-$irc_pdo = false;
-/* $irc_pdo = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
-    $db_config["irc_db_username"], $db_config["irc_db_password"]);
- */
-if ($irc_pdo) {
-    //$messages = DBH\getChatMessages($irc_pdo);
-}
 ?>
 
 <!DOCTYPE html>
@@ -27,21 +8,14 @@ if ($irc_pdo) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/main.css">
     <title>Internet Relay Chat</title>
 </head>
 <script src="js/main.js" type="module"></script>
 <body>
     <div class="pageContainer retro-fx">
-        <header>
-            <h1>Internet Relay Chat v1.0</h1>
-            <p id='clock'>Unknown</p>
-
-            <div id="language_option_container">
-                <button <?php setLanguageButtonSelected("cs")?> id="b_lang_cs">CZ</button>
-                <button <?php setLanguageButtonSelected("en")?> id="b_lang_en">EN</button>
-            </div>
-        </header>
+        <?php require ".\\layout\\header.php"; ?>
 
         <main>
             <div id="channel_window">
@@ -75,12 +49,7 @@ if ($irc_pdo) {
             </div>
         </main>
         
-        <footer>
-            <?php
-            echo "<p>" . getLan("footer_for") . "</p>";
-            echo "<p>" . getLan("footer_author") . " <a href='#'>David B.</a> 2025</p>";
-            ?>
-        </footer>
+        <?php require ".\\layout\\footer.php"; ?>
     </div>
     
 </body>
