@@ -2,32 +2,24 @@
 
 
 // Main content
-main {
-    display: flex;
-    flex: 1;
-    border-top: 4px solid $border_main;
-    border-bottom: 4px solid $border_main;
-    max-height: calc(100vh - 108px);
-    
-    h2 {
-        margin: 0;
-        padding: 2px 8px;
-        display: block;
-        font-size: 1.4rem;
+main h2 {
+    margin: 0;
+    padding: 2px 8px;
+    display: block;
+    font-size: 1.4rem;
 
-        background-color: $background_dark;
-    }
+    background-color: $background_dark;
 }
 
 div#chat_window {
+    flex: 5;
     display: block;
     position: relative;
-    flex: 5;
 }
 
 div#channel_window {
-    display: block;
     flex: 0;
+    display: block;
     min-width: 300px;
     border-right: 4px solid $border_main;
 }

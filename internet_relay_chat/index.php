@@ -1,5 +1,8 @@
 <?php
+session_start();
+
 require ".\\language.php";
+define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_index"));
 
 ?>
 
@@ -10,7 +13,7 @@ require ".\\language.php";
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/main.css">
-    <title>Internet Relay Chat</title>
+    <title><?php echo MAIN_LABEL; ?></title>
 </head>
 <script src="js/main.js" type="module"></script>
 <body>

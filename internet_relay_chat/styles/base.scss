@@ -1,5 +1,6 @@
 @use "sass:color";
 @import "./vars.scss";
+@import "./login.scss";
 
 
 // Base styles
@@ -44,6 +45,13 @@ body {
     pointer-events: none;
 }
 
+main {
+    display: flex;
+    flex: 1;
+    border-top: 4px solid $border_main;
+    border-bottom: 4px solid $border_main;
+    max-height: calc(100vh - 108px);
+}
 
 // Header
 header {

@@ -7,7 +7,7 @@ function setLanguageButtonSelected($testLanguage) {
 ?>
 
 <header>
-    <h1>Internet Relay Chat v1.0</h1>
+    <h1><?php echo MAIN_LABEL ?></h1>
     <p id='clock'>N/A</p>
 
     <div id="language_option_container">

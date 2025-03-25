@@ -1,3 +1,11 @@
+main {
+  display: flex;
+  flex: 1;
+  border-top: 4px solid rgb(40, 41, 43);
+  border-bottom: 4px solid rgb(40, 41, 43);
+  max-height: calc(100vh - 108px);
+}
+
 body {
   font-family: "Courier New", Courier, monospace;
   color: rgb(250, 250, 250);
@@ -28,6 +36,14 @@ body * {
   background-size: 100% 3px, 4px 100%;
   z-index: 1;
   pointer-events: none;
+}
+
+main {
+  display: flex;
+  flex: 1;
+  border-top: 4px solid rgb(40, 41, 43);
+  border-bottom: 4px solid rgb(40, 41, 43);
+  max-height: calc(100vh - 108px);
 }
 
 header {
