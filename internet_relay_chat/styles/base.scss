@@ -1,7 +1,5 @@
 @use "sass:color";
 @import "./vars.scss";
-@import "./login.scss";
-
 
 // Base styles
 body {
@@ -33,7 +31,7 @@ body {
     bottom: 0;
     right: 0;
 
-    // first gradient: line segments, second gradient: pixels
+    // first gradient: line segments; second gradient: pixels
     background: linear-gradient(color.adjust($background_scanlines, $alpha: -0.8) 50%,
         color.adjust($background_scanlines, $alpha: -0.98) 50%),
     linear-gradient(90deg, color.adjust(#ff0000, $alpha: -0.94),
@@ -90,32 +88,41 @@ div#language_option_container {
     align-items: center;
     height: inherit;
 
-    button {
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-
-        font-family: inherit;
-        font-size: 1.5em;
-        font-weight: bold;
-        text-decoration: underline;
-        text-underline-offset: 3px;
-        color: $button_text;
-        padding: 0 10px;
-        
-        @include hover-blink-anim("button_hover", $button_text, $button_text_highlight);
-
-        &.b_sel {
-            color: $button_text_highlight;
-        }
-
-        &:hover {
-            animation: button_hover 0.25s step-end;
-            animation-fill-mode: forwards;
-        }
-    }
+    
 }
 
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    color: $button_text;
+    padding: 0 10px;
+    transition: color 0.14s ease-out;
+    
+    @include hover-blink-anim("button_hover", "color", $button_text, $button_text_highlight);
+
+    &.b_sel:enabled {
+        color: $button_text_active;
+    }
+    &.b_sel:disabled {
+        color: darken($color: $button_text_active, $amount: 20);
+    }
+
+    &:hover:enabled {
+        animation: button_hover 0.25s step-end;
+        animation-fill-mode: forwards;
+    }
+    &:disabled {
+        color: $button_text_disabled;
+        transition: color 0.14s ease-out;
+    }
+}
 
 // Footer
 footer {
@@ -135,7 +142,7 @@ footer {
         text-decoration: underline;
         text-underline-offset: 4px;
 
-        @include hover-blink-anim("link_hover", $button_text, $button_text_link);
+        @include hover-blink-anim("link_hover", "color", $button_text, $button_text_link);
 
         &:hover {
             animation: link_hover 0.25s step-end;

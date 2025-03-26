@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require ".\\language.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
@@ -12,6 +11,7 @@ define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/login.css">
+    <script defer src="js/login.js"></script>
     <title><?php echo MAIN_LABEL; ?></title>
 </head>
 <body>
@@ -27,16 +27,24 @@ define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
                 <label for="password"><?php echo getLan("login_label_password"); ?></label>
                 <input type="password" name="password" id="in_password" required />
 
-                <button type="submit" id="in_submit">Přihlásit</button>
+                <button type="submit" id="in_submit" disabled>Přihlásit</button>
             </div>
-            <div>
-                <h2>Upozornění!</h2>
-                <p>Tento web <b>není</b> nijak zabezpečený, a proto se silně <b>nedoporučuje</b> zadávat jakékoliv citlivé udáje.</p>
+            <div id="disclaimer">
+                <h1>Upozornění!</h1>
+                <p>Před zadáváním <b>jakýchkoliv</b> citlivých udájů vězte následující:</p>
+                <ul>
+                    <li>Mezi klientem a serverem není <b>žádné</b> šifrování</li>
+                    <li>Server nepodporuje HTTPS (viz první bod)</li>
+                    <li>Heslo, které odešlete serveru, je v požadavku <b>prostý text</b></li>
+                    <li>Serverová databáze ukládá Vaše heslo jako hash</li>
+                </ul>
+                <p>Na základě těchto bodů je Vám <b>silně</b> doporučeno <b>nezadávat</b> jakékoliv citlivé informace.</p>
+                <p>Autor neručí za jakékoliv škody způsobené Vaší ignorancí.</p>
             </div>
         </main>
 
         <?php require ".\\layout\\footer.php"; ?>
-        <script src="js/header.js"></script>
+        
     </div>
 </body>
 </html>

@@ -8,8 +8,11 @@ main div {
   max-width: 40%;
   height: 300px;
 }
-main div h2 {
+main div#disclaimer h1 {
   margin: 0;
+}
+main div#disclaimer p {
+  font-size: 1.5rem;
 }
 
 div#login_container label {
@@ -26,6 +29,7 @@ div#login_container input {
   padding: 0 8px;
   font-family: inherit;
   font-size: 1.5rem;
+  font-weight: bold;
   outline: none;
   color: rgb(250, 250, 250);
   background-color: rgb(12, 13, 15);
@@ -36,19 +40,19 @@ div#login_container input {
 }
 @keyframes anim_border_bottom {
   0% {
-    border-bottom-color: rgb(242, 242, 242);
+    border-bottom-color: rgb(60, 255, 148);
   }
   25% {
     border-bottom-color: rgb(141, 141, 141);
   }
   50% {
-    border-bottom-color: rgb(242, 242, 242);
+    border-bottom-color: rgb(60, 255, 148);
   }
   75% {
     border-bottom-color: rgb(141, 141, 141);
   }
   100% {
-    border-bottom-color: rgb(242, 242, 242);
+    border-bottom-color: rgb(60, 255, 148);
   }
 }
 div#login_container input:focus {

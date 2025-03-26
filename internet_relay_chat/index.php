@@ -1,5 +1,4 @@
 <?php
-session_start();
 
 require ".\\language.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_index"));
@@ -13,9 +12,10 @@ define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_index"));
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/main.css">
+    <script defer src="js/main.js" type="module"></script>
     <title><?php echo MAIN_LABEL; ?></title>
 </head>
-<script src="js/main.js" type="module"></script>
+
 <body>
     <div class="pageContainer retro-fx">
         <?php require ".\\layout\\header.php"; ?>

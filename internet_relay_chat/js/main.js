@@ -1,5 +1,4 @@
 import * as chat from "./chat.js";
-import "./header.js";
 
 //Updating the chat
 const chatContainer = document.getElementById("chat");

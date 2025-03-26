@@ -9,9 +9,15 @@ main {
         flex: 1;
         max-width: 40%;
         height: 300px;
+    }
 
-        h2 {
+    div#disclaimer {
+        h1 {
             margin: 0;
+        }
+
+        p {
+            font-size: 1.5rem;
         }
     }
 }
@@ -34,6 +40,7 @@ div#login_container {
 
         font-family: inherit;
         font-size: 1.5rem;
+        font-weight: bold;
         
         outline: none;
         color: $text_white;
@@ -43,7 +50,7 @@ div#login_container {
         border-right: none;
         border-bottom: 2px solid $border_input;
 
-        @include hover-blink-border-bottom-anim("anim_border_bottom", $border_input, $border_input_focus);
+        @include hover-blink-anim("anim_border_bottom", "border-bottom-color", $border_input, $border_input_focus);
 
         &:focus {
             background-color: $background_input_focus;

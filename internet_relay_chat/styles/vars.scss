@@ -11,30 +11,22 @@ $text_chat_time: rgb(90, 90, 240);
 
 $border_main: rgb(40, 41, 43);
 $border_input: rgb(141, 141, 141);
-$border_input_focus: rgb(242, 242, 242);
+$border_input_focus: rgb(60, 255, 148);
 
-$button_text: rgb(235, 235, 235);
-$button_text_highlight: rgb(0, 250, 240);
-$button_text_link: rgb(255, 208, 0);
+$button_text: rgb(211, 211, 211);
+$button_text_highlight: rgb(64, 233, 255);
+$button_text_active: rgb(20, 200, 255);
+$button_text_link: rgb(255, 208, 64);
+$button_text_disabled: rgb(100, 100, 100);
 
 // Mixins
-@mixin hover-blink-anim($name, $baseColor, $blinkColor) {
+@mixin hover-blink-anim($name, $propety, $baseColor, $blinkColor) {
     @keyframes #{$name} {
-        0% { color: $blinkColor; }
-        25% { color: $baseColor; }
-        50% { color: $blinkColor; }
-        75% { color: $baseColor; }
-        100% { color: $blinkColor; }
-    }
-}
-
-@mixin hover-blink-border-bottom-anim($name, $baseColor, $blinkColor) {
-    @keyframes #{$name} {
-        0% { border-bottom-color: $blinkColor; }
-        25% { border-bottom-color: $baseColor; }
-        50% { border-bottom-color: $blinkColor; }
-        75% { border-bottom-color: $baseColor; }
-        100% { border-bottom-color: $blinkColor; }
+        0% { #{$propety}: $blinkColor; }
+        25% { #{$propety}: $baseColor; }
+        50% { #{$propety}: $blinkColor; }
+        75% { #{$propety}: $baseColor; }
+        100% { #{$propety}: $blinkColor; }
     }
 }
 

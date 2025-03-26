@@ -5,7 +5,7 @@ var localChatSignature = 0;
 // MARK: Server communication
 /**
  * Sends a fetch request to the server, asking for the current signature in the channel.
- * @returns {Promise|false} A Promise from response.json() or false if the request fails.
+ * @returns {Promise<any>|false} A Promise from response.json() or false if the request fails.
  */
 export async function fetchMessageSign() {
     const body = {

@@ -26,8 +26,14 @@ switch ($request["command"]) {
     case "getChat": // Returns an associative array of chat messages in the current channel.
         $responseData = DBH\getChatMessages($pdo_irc, $request["channel"], $request["offset"]);
         break;
+    case "findUser": // Returns true when the queried username exists in the 'users' table.
+        $responseData = DBH\findUsername($pdo_irc, $request["username"]);
+        break;
     default:
-        $responseData = array("Unknown command received!");
+        $responseData = array(
+            "error_msg" => "Unknown command received!",
+            "error" => true
+        );
         break;
 }
 

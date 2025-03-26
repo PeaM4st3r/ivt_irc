@@ -6,6 +6,7 @@ function setLanguageButtonSelected($testLanguage) {
 }
 ?>
 
+<script defer src="./js/header.js"></script>
 <header>
     <h1><?php echo MAIN_LABEL ?></h1>
     <p id='clock'>N/A</p>
