@@ -1,4 +1,4 @@
-// Init
+// MARK: Init
 const urlRequestHandler = "handlers\\request_handler.php";
 const USERNAME_INPUT_STATES = Object.freeze({
     USR_EXISTS: 1,
@@ -7,13 +7,16 @@ const USERNAME_INPUT_STATES = Object.freeze({
     SERVER_ERROR: 4
 });
 const LANGUAGE_CS = Object.freeze({
-
+    login: "Přihlásit se",
+    create: "Vytvořit účet"
 });
 const LANGUAGE_EN = Object.freeze({
-
+    login: "Log in",
+    create: "Create account"
 });
 
 var websiteLanguage = document.documentElement.lang;
+
 
 /**
  * Used for testing if a specific username exists on the server.
@@ -56,11 +59,39 @@ function updateSubmitButton(disabled = false, label = "") {
     in_SubmitButton.innerHTML = label;
 }
 
+/**
+ * Creates/updates a paragraph with the specified ID.
+ * @param {string} id The id of the specific message paragraph element.
+ * @param {string} message The message to put into the paragraph.
+ * @returns a new ChildNode element if the paragraph doesn't exist yet, or an HTMLElement of
+ * the paragraph.
+ */
+function setInputResolveMessage(id, message) {
+    let messageElement = document.getElementById(id);
+    if (messageElement) {
+        messageElement.innerHTML = message;
+        return document.getElementById(id);
+    }
 
-// Runtime
+    const inputResolveElementString = `<p id='${id}'>${message}</p>`;
+
+    let doc = new DOMParser().parseFromString(inputResolveElementString, "text/html");
+    return doc.body.firstChild;
+}
+
+
+function updateResolveElement(appendNode, message) {
+    const pargraphNode = setInputResolveMessage(appendNode.id, message);
+}
+
+
+
+// MARK: Runtime
 const in_SubmitButton = document.getElementById("in_submit");
 const in_Username = document.getElementById("in_username");
+const in_Password = document.getElementById("in_password");
 
+updateSubmitButton(true, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).login);
 
 function updateFormFields(var_inputState) {
     switch (var_inputState) {
@@ -71,10 +102,10 @@ function updateFormFields(var_inputState) {
             updateSubmitButton(true);
             break;
         case USERNAME_INPUT_STATES.USR_EXISTS:
-            updateSubmitButton(false, (websiteLanguage == "en" ? "Login" : "Přihlásit"));
+            updateSubmitButton(false, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).login);
             break;
         case USERNAME_INPUT_STATES.USR_NEW:
-            updateSubmitButton(false, (websiteLanguage == "en" ? "Create account" : "Vytvořit účet"));
+            updateSubmitButton(false, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).create);
             break;
         
         default:
@@ -84,7 +115,7 @@ function updateFormFields(var_inputState) {
 
 in_Username.addEventListener("change", (event) => {
     // Fetching the username
-    var inputState = USERNAME_INPUT_STATES.EMPTY;
+    let inputState = USERNAME_INPUT_STATES.EMPTY;
     const inputUsername = event.target.value;
     if(!inputUsername){
         updateFormFields(inputState);
