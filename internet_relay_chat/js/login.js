@@ -80,8 +80,24 @@ function setInputResolveMessage(id, message) {
 }
 
 
+/**
+ * Updates the resolve element based on the message provided. If the message is empty, removes the resolve element.
+ * @param {ChildNode} appendNode The node to append the message to (this should be an <input> element).
+ * @param {string} message The message to show in the new paragraph element.
+ * @returns 
+ */
 function updateResolveElement(appendNode, message) {
-    const pargraphNode = setInputResolveMessage(appendNode.id, message);
+    if (message == "") {
+        const paragraphNode = document.getElementById(appendNode.id + "_info");
+
+        if (!paragraphNode) return;
+        paragraphNode.remove();
+        return;
+    }
+
+    const appendParent = appendNode.parentNode;
+    const paragraphNode = setInputResolveMessage(appendNode.id + "_info", message);
+    appendParent.insertBefore(paragraphNode, appendNode.nextSibling);
 }
 
 
@@ -97,15 +113,19 @@ function updateFormFields(var_inputState) {
     switch (var_inputState) {
         case USERNAME_INPUT_STATES.EMPTY:
             updateSubmitButton(true);
+            updateResolveElement(in_Username, "Prosíme, vyplňte toto pole");
             break;
         case USERNAME_INPUT_STATES.SERVER_ERROR:
             updateSubmitButton(true);
+            updateResolveElement(in_Username, "Chyba serveru (opakujte akci)");
             break;
-        case USERNAME_INPUT_STATES.USR_EXISTS:
+        case USERNAME_INPUT_STATES.USR_EXISTS: // User already exists (log in)
             updateSubmitButton(false, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).login);
+            updateResolveElement(in_Username, "");
             break;
-        case USERNAME_INPUT_STATES.USR_NEW:
+        case USERNAME_INPUT_STATES.USR_NEW: // New user (create account)
             updateSubmitButton(false, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).create);
+            updateResolveElement(in_Username, "Vytvoření nového účtu");
             break;
         
         default:

@@ -20,12 +20,12 @@ define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
 
         <main>
             <div id="login_container">
-                <label for="username"><?php echo getLan("login_label_username"); ?></label>
+                <label for="in_username"><?php echo getLan("login_label_username"); ?></label>
                 <input type="text" name="username" id="in_username" required
                     minlength="3" maxlength="32"/>
                 <!-- <p>Testovací text</p> -->
                 
-                <label for="password"><?php echo getLan("login_label_password"); ?></label>
+                <label for="in_password"><?php echo getLan("login_label_password"); ?></label>
                 <input type="password" name="password" id="in_password" required />
 
                 <button type="submit" id="in_submit" disabled>Přihlásit</button>
