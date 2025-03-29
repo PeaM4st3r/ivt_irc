@@ -1,7 +1,11 @@
 <?php
-
-require ".\\language.php";
+require ".\\handlers\\common.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
+
+if (isset($_SESSION["user_id"])) {
+    header("Location: logout.php");
+    die();
+}
 
 ?>
 <!DOCTYPE html>
@@ -11,7 +15,7 @@ define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles/base.css">
     <link rel="stylesheet" href="styles/login.css">
-    <script defer src="js/login.js"></script>
+    <script defer src="js/login.js" type="module"></script>
     <title><?php echo MAIN_LABEL; ?></title>
 </head>
 <body>
@@ -28,24 +32,23 @@ define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
                 <label for="in_password"><?php echo getLan("login_label_password"); ?></label>
                 <input type="password" name="password" id="in_password" required />
 
-                <button type="submit" id="in_submit" disabled>Přihlásit</button>
+                <button id="in_submit" disabled>Log in</button>
             </div>
             <div id="disclaimer">
-                <h1>Upozornění!</h1>
-                <p>Před zadáváním <b>jakýchkoliv</b> citlivých udájů vězte následující:</p>
+                <h1><?php echo getLan("login_disclaimer_warning"); ?></h1>
+                <p><?php echo getLan("login_disclaimer_before"); ?></p>
                 <ul>
-                    <li>Mezi klientem a serverem není <b>žádné</b> šifrování</li>
-                    <li>Server nepodporuje HTTPS (viz první bod)</li>
-                    <li>Heslo, které odešlete serveru, je v požadavku <b>prostý text</b></li>
-                    <li>Serverová databáze ukládá Vaše heslo jako hash</li>
+                    <li><?php echo getLan("login_disclaimer_list_1"); ?></li>
+                    <li><?php echo getLan("login_disclaimer_list_2"); ?></li>
+                    <li><?php echo getLan("login_disclaimer_list_3"); ?></li>
+                    <li><?php echo getLan("login_disclaimer_list_4"); ?></li>
                 </ul>
-                <p>Na základě těchto bodů je Vám <b>silně</b> doporučeno <b>nezadávat</b> jakékoliv citlivé informace.</p>
-                <p>Autor neručí za jakékoliv škody způsobené Vaší ignorancí.</p>
+                <p><?php echo getLan("login_disclaimer_based_on"); ?></p>
+                <p><?php echo getLan("login_disclaimer_no_responsibility"); ?></p>
             </div>
         </main>
 
         <?php require ".\\layout\\footer.php"; ?>
-        
     </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
 // MARK: Init
-const urlRequestHandler = "handlers\\request_handler.php";
+import * as comm from "./communication.js";
+
 const USERNAME_INPUT_STATES = Object.freeze({
     USR_EXISTS: 1,
     USR_NEW: 2,
@@ -8,16 +9,33 @@ const USERNAME_INPUT_STATES = Object.freeze({
 });
 const LANGUAGE_CS = Object.freeze({
     login: "Přihlásit se",
-    create: "Vytvořit účet"
+    create: "Vytvořit účet",
+
+    response_user_exists: "Přihlašování existujícího uživatele",
+    response_user_new: "Vytváření nového uživatele",
+    response_server_error: "Chyba komunikace se serverem, opakujte akci",
+    response_empty_field: "Toto pole nesmí být prázdné",
+
+    create_user_success: "Nový uživatel byl úspěšně vytvořen"
 });
 const LANGUAGE_EN = Object.freeze({
     login: "Log in",
-    create: "Create account"
+    create: "Create account",
+
+    response_user_exists: "Logging in as existing user",
+    response_user_new: "Creating a new user account",
+    response_server_error: "Server communication failed, please try again",
+    response_empty_field: "This field mustn't be empty",
+
+    create_user_success: "New user account successfully created"
 });
 
-var websiteLanguage = document.documentElement.lang;
+let websiteLanguage = document.documentElement.lang;
+let loginState = USERNAME_INPUT_STATES.EMPTY;
+const LANG_ENUM = (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS);
 
 
+// MARK: Function definitions
 /**
  * Used for testing if a specific username exists on the server.
  * @param {string} var_username The username to search for.
@@ -29,22 +47,57 @@ async function testIfUsernameExists(var_username) {
         username: var_username
     }
 
-    try {
-        const request = await fetch(urlRequestHandler, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            body: JSON.stringify(body)
-        });
-        if (!request.ok) throw new Error("Failed to test username existence - HTTP wasn't 'OK'");
-
-        return await request.json();
-    } catch (error) {
-        console.log("Couldn't test if username exists: " + error);
-        return false;
-    }
+    return comm.fetchPostJSON(body, comm.urlRequestHandler);
 }
+
+/**
+ * Sends a request to the server to log in with the provided credentials.
+ * @param {string} var_username The username of the account to log in as.
+ * @param {string} var_password The password for the account.
+ */
+function logIn(var_username, var_password) {
+    const body = {
+        command: "logIn",
+        username: var_username,
+        password: var_password
+    };
+
+    const response = comm.fetchPostJSON(body, comm.urlRequestHandler);
+    response.then((data) => {
+        if (!data.ok) {
+            updateResolveElement(in_SubmitButton, data.message);
+            return;
+        }
+
+        location.reload();
+    });
+}
+
+/**
+ * Sends a request to the server to create a new account with the provided credentials.
+ * @param {string} var_username The username of the new account.
+ * @param {string} var_password The password for the new account.
+ */
+function createUserAccount(var_username, var_password) {
+    const body = {
+        command: "createAccount",
+        username: var_username,
+        password: var_password
+    };
+
+    const response = comm.fetchPostJSON(body, comm.urlRequestHandler);
+    response.then((data) => {
+        resetFormState();
+
+        if (!data.ok) {
+            updateResolveElement(in_SubmitButton, data.message);
+            return;
+        }
+        updateResolveElement(in_SubmitButton, data.message);
+    });
+}
+
+
 
 /**
  * Changes the state of the submit button according to the provided parameters.
@@ -79,7 +132,6 @@ function setInputResolveMessage(id, message) {
     return doc.body.firstChild;
 }
 
-
 /**
  * Updates the resolve element based on the message provided. If the message is empty, removes the resolve element.
  * @param {ChildNode} appendNode The node to append the message to (this should be an <input> element).
@@ -100,6 +152,22 @@ function updateResolveElement(appendNode, message) {
     appendParent.insertBefore(paragraphNode, appendNode.nextSibling);
 }
 
+/**
+ * Resets all of the form fields and additional messages to their default state.
+ */
+function resetFormState(resetSubmit = false) {
+    if (resetSubmit) {
+        updateResolveElement(in_SubmitButton, "")
+        return;
+    }
+
+    in_Username.value = "";
+    in_Password.value = "";
+
+    updateResolveElement(in_Username, "");
+    updateResolveElement(in_Password, "");
+}
+
 
 
 // MARK: Runtime
@@ -107,48 +175,74 @@ const in_SubmitButton = document.getElementById("in_submit");
 const in_Username = document.getElementById("in_username");
 const in_Password = document.getElementById("in_password");
 
-updateSubmitButton(true, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).login);
+updateSubmitButton(true, LANG_ENUM.login);
 
 function updateFormFields(var_inputState) {
     switch (var_inputState) {
         case USERNAME_INPUT_STATES.EMPTY:
             updateSubmitButton(true);
-            updateResolveElement(in_Username, "Prosíme, vyplňte toto pole");
+            updateResolveElement(in_Username, LANG_ENUM.response_empty_field);
             break;
         case USERNAME_INPUT_STATES.SERVER_ERROR:
             updateSubmitButton(true);
-            updateResolveElement(in_Username, "Chyba serveru (opakujte akci)");
+            updateResolveElement(in_Username, LANG_ENUM.response_server_error);
             break;
         case USERNAME_INPUT_STATES.USR_EXISTS: // User already exists (log in)
-            updateSubmitButton(false, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).login);
-            updateResolveElement(in_Username, "");
+            updateSubmitButton(false, LANG_ENUM.login);
+            updateResolveElement(in_Username, LANG_ENUM.response_user_exists);
             break;
         case USERNAME_INPUT_STATES.USR_NEW: // New user (create account)
-            updateSubmitButton(false, (websiteLanguage == "en" ? LANGUAGE_EN : LANGUAGE_CS).create);
-            updateResolveElement(in_Username, "Vytvoření nového účtu");
+            updateSubmitButton(false, LANG_ENUM.create);
+            updateResolveElement(in_Username, LANG_ENUM.response_user_new);
             break;
         
         default:
+            updateSubmitButton(true);
+            updateResolveElement(in_Username, "Congratulations, you somehow broke this");
             break;
     }
 }
 
-in_Username.addEventListener("change", (event) => {
-    // Fetching the username
-    let inputState = USERNAME_INPUT_STATES.EMPTY;
+
+// Events
+in_Username.addEventListener("focusout", (event) => {
+    loginState = USERNAME_INPUT_STATES.EMPTY;
     const inputUsername = event.target.value;
     if(!inputUsername){
-        updateFormFields(inputState);
+        updateFormFields(loginState);
         return
     }
 
     const response = testIfUsernameExists(inputUsername);
-    if(!response) inputState = USERNAME_INPUT_STATES.SERVER_ERROR;
+    if(!response) loginState = USERNAME_INPUT_STATES.SERVER_ERROR;
 
     response.then((data) => {
-        console.log(data);
-        inputState = (data == true ? USERNAME_INPUT_STATES.USR_EXISTS : USERNAME_INPUT_STATES.USR_NEW);
+        loginState = (data == true ? USERNAME_INPUT_STATES.USR_EXISTS : USERNAME_INPUT_STATES.USR_NEW);
 
-        updateFormFields(inputState);
+        updateFormFields(loginState);
+        resetFormState(true);
     });
+});
+
+in_Password.addEventListener("focusout", (event) => {
+    const inputPassword = event.target.value;
+    if (!inputPassword) {
+        updateResolveElement(in_Password, LANG_ENUM.response_empty_field);
+        updateSubmitButton(true);
+        return;
+    }
+
+    updateResolveElement(in_Password, "");
+    updateSubmitButton(false);
+});
+
+in_SubmitButton.addEventListener("click", () => {
+    if (loginState != USERNAME_INPUT_STATES.USR_NEW) return;
+
+    createUserAccount(in_Username.value, in_Password.value);
+});
+in_SubmitButton.addEventListener("click", () => {
+    if (loginState != USERNAME_INPUT_STATES.USR_EXISTS) return;
+
+    logIn(in_Username.value, in_Password.value);
 });

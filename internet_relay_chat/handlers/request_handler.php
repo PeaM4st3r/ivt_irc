@@ -2,16 +2,17 @@
 header("Content-Type: application/json");
 header("Cache-Control: no-cache, must-revalidate");
 
-require ".\\db_handler.php";
+require ".\\login_handler.php";
+require ".\\common.php";
 
 if(!isset($_POST)){
     exit();
 }
 
 // Get POST data
-$requestData = file_get_contents("php://input");
-$request = json_decode($requestData, true);
-$responseData;
+$requestString = file_get_contents("php://input");
+$requestData = json_decode($requestString, true);
+$responseData = null;
 
 // Connect to IRC database
 $db_config = parse_ini_file("./../irc_cfg.ini");
@@ -19,22 +20,33 @@ $pdo_irc = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"
     $db_config["irc_db_username"], $db_config["irc_db_password"]);
 
 
-switch ($request["command"]) {
+// TO-DO: add $requestData sanitization (mainly null-checking)
+switch ($requestData["command"]) {
     case "getSign": // Returns the signature of the current channel.
-        $responseData = DBH\getChannelSignHash($pdo_irc, $request["channel"]);
+        $responseData = DBH\getChannelSignHash($pdo_irc, $requestData["channel"]);
         break;
     case "getChat": // Returns an associative array of chat messages in the current channel.
-        $responseData = DBH\getChatMessages($pdo_irc, $request["channel"], $request["offset"]);
+        $responseData = DBH\getChatMessages($pdo_irc, $requestData["channel"], $requestData["offset"]);
         break;
     case "findUser": // Returns true when the queried username exists in the 'users' table.
-        $responseData = DBH\findUsername($pdo_irc, $request["username"]);
+        $responseData = DBH\findUsername($pdo_irc, $requestData["username"]);
+        break;
+    case "logIn":
+        $responseData = USRH\logIntoAccount($pdo_irc, $requestData["username"], $requestData["password"])->getArray();
+        break;
+    case "logOut":
+        $responseData = USRH\logOut()->getArray();
+        break;
+    case "createAccount":
+        $responseData = USRH\createAccount($pdo_irc, $requestData["username"], $requestData["password"])->getArray();
         break;
     default:
-        $responseData = array(
-            "error_msg" => "Unknown command received!",
-            "error" => true
-        );
+        $responseData = RequestStatus::makeNewError("Invalid command received!");
         break;
+}
+
+if ($responseData == null) {
+    $responseData = RequestStatus::makeNewError("Invalid request received!");
 }
 
 echo json_encode($responseData);

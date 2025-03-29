@@ -1,0 +1,38 @@
+main {
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0 5%;
+}
+main div {
+  flex: 1;
+  max-width: 60%;
+  min-height: 300px;
+}
+
+div#logout_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+div#logout_container p, div#logout_container a, div#logout_container button {
+  flex: 1;
+  margin: 0;
+  font-size: 1.75rem;
+}
+div#logout_container button {
+  display: block;
+  max-height: -moz-min-content;
+  max-height: min-content;
+  margin: 12px 0;
+}
+div#logout_container a {
+  display: inline-block;
+  max-height: -moz-min-content;
+  max-height: min-content;
+  margin: 0 0 12px 0;
+}
+div#logout_container p#username_field {
+  font-size: 3rem;
+  color: rgb(20, 180, 0);
+}/*# sourceMappingURL=logout.css.map */

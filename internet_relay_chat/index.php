@@ -1,8 +1,9 @@
 <?php
-
-require ".\\language.php";
+require ".\\handlers\\common.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_index"));
 
+
+session_write_close();
 ?>
 
 <!DOCTYPE html>

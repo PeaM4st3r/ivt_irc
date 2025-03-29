@@ -116,18 +116,7 @@ button:disabled {
   transition: color 0.14s ease-out;
 }
 
-footer {
-  flex: 0 1 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-footer p {
-  margin: 2px 0;
-  color: rgb(90, 90, 90);
-}
-footer a {
+a {
   color: rgb(211, 211, 211);
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -149,7 +138,19 @@ footer a {
     color: rgb(255, 208, 64);
   }
 }
-footer a:hover {
+a:hover {
   animation: link_hover 0.25s step-end;
   animation-fill-mode: forwards;
+}
+
+footer {
+  flex: 0 1 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+footer p {
+  margin: 2px 0;
+  color: rgb(90, 90, 90);
 }/*# sourceMappingURL=base.css.map */

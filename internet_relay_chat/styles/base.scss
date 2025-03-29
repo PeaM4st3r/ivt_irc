@@ -124,6 +124,19 @@ button {
     }
 }
 
+a {
+    color: $button_text;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+
+    @include hover-blink-anim("link_hover", "color", $button_text, $button_text_link);
+
+    &:hover {
+        animation: link_hover 0.25s step-end;
+        animation-fill-mode: forwards;
+    }
+}
+
 // Footer
 footer {
     flex: 0 1 50px;
@@ -135,18 +148,5 @@ footer {
     p {
         margin: 2px 0;
         color: $text_low_contrast;
-    }
-
-    a {
-        color: $button_text;
-        text-decoration: underline;
-        text-underline-offset: 4px;
-
-        @include hover-blink-anim("link_hover", "color", $button_text, $button_text_link);
-
-        &:hover {
-            animation: link_hover 0.25s step-end;
-            animation-fill-mode: forwards;
-        }
     }
 }

@@ -1,4 +1,4 @@
-const urlRequestHandler = "handlers\\request_handler.php";
+import * as comm from "./communication.js";
 var localChatSignature = 0;
 
 
@@ -13,23 +13,8 @@ export async function fetchMessageSign() {
         channel: "institut"
     }
 
-    try {
-        const request = await fetch(urlRequestHandler, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            body: JSON.stringify(body)
-        });
-        if (!request.ok) throw new Error("Failed to fetch message sign - HTTP wasn't 'OK'");
-
-        return await request.json();
-    } catch (error) {
-        console.log("Couldn't fetch message signature: " + error);
-        return false;
-    }
+    return comm.fetchPostJSON(body, comm.urlRequestHandler);
 }
-
 
 /**
  * Sends a fetch request to the server, asking for messages in the current channel.
@@ -42,21 +27,7 @@ export async function fetchChatMessages() {
         offset: 0
     }
 
-    try {
-        const request = await fetch(urlRequestHandler, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json; charset=utf-8"
-            },
-            body: JSON.stringify(body)
-        });
-        if (!request.ok) throw new Error("Failed to fetch chat messages - HTTP wasn't 'OK'");
-
-        return await request.json();
-    } catch (error) {
-        console.log("Couldn't fetch chat messages: " + error);
-        return false;
-    }
+    return comm.fetchPostJSON(body, comm.urlRequestHandler);
 }
 
 
