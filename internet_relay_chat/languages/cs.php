@@ -4,12 +4,15 @@ $langArray = [
     "title_login" => "Přihlášení",
     "title_logout" => "Odlášení",
     "title_index" => "Kanály",
+    "nav_user_account" => "Účet",
+    "nav_chat" => "Chat",
     
     "channel_container" => "Kanály",
     "footer_author" => "Vytvořil",
     "footer_for" => "Závěřečný projekt do předmětu IVT (RG Prostějov)",
 
     "button_send_message" => "Odeslat",
+    "message_input_placeholder" => "Napsat zprávu",
 
     "login_label_username" => "Uživatelské jméno",
     "login_label_password" => "Heslo",

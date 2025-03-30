@@ -1,9 +1,8 @@
 <?php
 require ".\\handlers\\common.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_index"));
+define("NAV_LOGIN", getLan("nav_user_account"));
 
-
-session_write_close();
 ?>
 
 <!DOCTYPE html>
@@ -47,8 +46,9 @@ session_write_close();
                     </div> -->
                 </div>
                 <div id="message_input_container">
-                    <textarea id="message_input" name="message_input_field" placeholder="Send message to #"></textarea>
-                    <button type="submit" id="b_chat_send"><?php echo getLan("button_send_message")?></button>
+                    <textarea id="message_input" name="message_input_field"
+                        placeholder='<?php echo getLan("message_input_placeholder")?>'></textarea>
+                    <button type="submit" id="b_chat_send"><?php echo getLan("button_send_message");?></button>
                 </div>
             </div>
         </main>

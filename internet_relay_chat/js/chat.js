@@ -39,7 +39,7 @@ export async function fetchChatMessages() {
  * @param {string} msgText The content of the message.
  * @returns A div of class `chat_element` to be appended to the chat container element.
  */
-function createChatElement(username, sentTime, msgText) {
+export function createChatElement(username, sentTime, msgText) {
     const chatElementString = `<div class='chat_element'>
         <div class='chat_element_author'><p>${username}</p>
         <span class='chat_time_style'>@${sentTime}</span></div>

@@ -1,6 +1,7 @@
 <?php
 require ".\\handlers\\common.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_login"));
+define("NAV_LOGIN", getLan("nav_chat"));
 
 if (isset($_SESSION["user_id"])) {
     header("Location: logout.php");

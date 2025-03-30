@@ -1,6 +1,9 @@
 // MARK: Init
 import * as comm from "./communication.js";
 
+const addrLogin = document.getElementById("nav_login");
+addrLogin.href = "index.php";
+
 const USERNAME_INPUT_STATES = Object.freeze({
     USR_EXISTS: 1,
     USR_NEW: 2,

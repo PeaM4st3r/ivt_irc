@@ -4,12 +4,15 @@ $langArray = [
     "title_login" => "Login",
     "title_logout" => "Logout",
     "title_index" => "Channels",
+    "nav_user_account" => "User account",
+    "nav_chat" => "Chat",
 
     "channel_container" => "Channels",
     "footer_author" => "Created by",
     "footer_for" => "Final project for ICT class (RG Prostějov)",
 
     "button_send_message" => "Send",
+    "message_input_placeholder" => "Write message",
 
     "login_label_username" => "Username",
     "login_label_password" => "Password",

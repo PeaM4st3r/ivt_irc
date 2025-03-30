@@ -8,7 +8,8 @@ function setLanguageButtonSelected($testLanguage) {
 
 <script defer src="./js/header.js"></script>
 <header>
-    <h1><?php echo MAIN_LABEL ?></h1>
+    <h1><?php echo MAIN_LABEL; ?></h1>
+    <a id="nav_login" href="#"><?php echo NAV_LOGIN; ?></a>
     <p id='clock'>N/A</p>
 
     <div id="language_option_container">

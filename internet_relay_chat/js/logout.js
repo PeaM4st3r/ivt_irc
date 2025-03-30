@@ -1,6 +1,8 @@
 // MARK: Init
 import * as comm from "./communication.js";
 
+const addrLogin = document.getElementById("nav_login");
+addrLogin.href = "index.php";
 
 // MARK: Function definitions
 function logOut() {

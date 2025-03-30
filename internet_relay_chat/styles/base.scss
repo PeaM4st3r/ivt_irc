@@ -13,6 +13,8 @@ body {
     * {
         @include text-glow();
     }
+
+    scrollbar-color: $button_text $background_main;
 }
 
 .pageContainer {
@@ -45,50 +47,10 @@ body {
 
 main {
     display: flex;
-    flex: 1;
+    flex: 1 1;
     border-top: 4px solid $border_main;
     border-bottom: 4px solid $border_main;
     max-height: calc(100vh - 108px);
-}
-
-// Header
-header {
-    display: flex;
-    width: 100%;
-    flex: 0 1 50px;
-    
-    h1 {
-        display: flex;
-        flex: 4;
-        justify-content: flex-start;
-        align-items: center;
-
-        margin: 0 0 0 8px;
-        border-right: 4px solid $border_main;
-        height: inherit;
-    }
-
-    p#clock {
-        display: flex;
-        flex: 1;
-        justify-content: flex-start;
-        align-items: center;
-
-        margin: 0 0 0 8px;
-        padding: 0;
-        border-right: 4px solid $border_main;
-        height: inherit;
-    }
-}
-
-div#language_option_container {
-    display: flex;
-    flex: 1;
-    justify-content: center;
-    align-items: center;
-    height: inherit;
-
-    
 }
 
 button {
@@ -125,9 +87,10 @@ button {
 }
 
 a {
-    color: $button_text;
+    color: $button_text_base_link;
     text-decoration: underline;
     text-underline-offset: 4px;
+    font-weight: bold;
 
     @include hover-blink-anim("link_hover", "color", $button_text, $button_text_link);
 
@@ -137,9 +100,59 @@ a {
     }
 }
 
-// Footer
+
+// Layout styles
+header {
+    display: flex;
+    width: 100%;
+    flex: 0 1;
+    height: 50px;
+
+    justify-content: center;
+    align-items: baseline;
+    
+    h1 {
+        flex: 6;
+        justify-self: flex-start;
+
+        margin: 0 0 0 8px;
+        height: inherit;
+    }
+
+    a {
+        display: block;
+        max-width: max-content;
+        flex: 1;
+        margin: 0 8px 0 0;
+        font-size: 1.4rem;
+    }
+
+    p#clock {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        margin: 0;
+        padding: 0 0 0 8px;
+        height: inherit;
+        border-left: 4px solid $border_main;
+        border-right: 4px solid $border_main;
+    }
+}
+
+div#language_option_container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
 footer {
-    flex: 0 1 50px;
+    flex: 0 1;
+    height: 50px;
     display: flex;
     justify-content: center;
     align-items: center;

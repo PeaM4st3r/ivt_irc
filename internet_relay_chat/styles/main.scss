@@ -24,14 +24,12 @@ div#channel_window {
     border-right: 4px solid $border_main;
 }
 
-// Channel container and channel elements
 
-
-// Chat container and chat elements
+// Chat container
 div#chat {
     display: block;
     overflow: hidden auto;
-    max-height: calc(100% - 30px); //Still broken ffs
+    max-height: calc(100% - 80px);
 }
 
 .chat_element {
@@ -52,7 +50,7 @@ div#chat {
     flex-wrap: wrap;
 
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
 
     p {
         margin: 2px 0;
@@ -60,7 +58,7 @@ div#chat {
 
     .chat_time_style {
         color: $text_chat_time;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         margin: 2px 0;
     }
 }
@@ -76,17 +74,49 @@ div#chat {
 // Message input
 div#message_input_container {
     display: flex;
+    height: 50px;
 
     textarea#message_input {
+        display: block;
+        box-sizing: border-box;
+        margin: 0 0 2px 0;
+        padding: 2px 4px;
         flex: 1;
-        font-size: 1.1em;
 
+        font-family: inherit;
+        font-size: 1.1rem;
+
+        outline: none;
         background-color: $background_dark;
         color: $text_white;
-        border: 2px solid $border_main;
-        border-radius: 6px;
+        border-top: 2px solid $border_main;
+        border-left: none;
+        border-right: none;
+        border-bottom: 2px solid $border_input;
 
         overflow: hidden auto;
         resize: none;
+
+        @include hover-blink-anim("anim_border_bottom", "border-bottom-color", $border_input, $border_input_focus);
+
+        &:focus {
+            background-color: $background_input_focus;
+
+            animation: anim_border_bottom 0.25s step-end;
+            animation-fill-mode: forwards;
+        }
+    }
+
+    button {
+        box-sizing: border-box;
+        background-color: $background_dark;
+
+        margin-bottom: 2px;
+        border-top: 2px solid $border_main;
+        border-bottom: 2px solid $border_input;
+
+        &:active:enabled {
+            background-color: $background_input_focus;
+        }
     }
 }
