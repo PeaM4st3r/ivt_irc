@@ -1,5 +1,6 @@
 <?php
 require ".\\handlers\\common.php";
+require ".\\handlers\\db_handler.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_logout"));
 define("NAV_LOGIN", getLan("nav_chat"));
 
@@ -8,6 +9,16 @@ if (!isset($_SESSION["user_id"])) {
     die();
 }
 
+$db_config = parse_ini_file("./irc_cfg.ini");
+$pdo_irc = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
+    $db_config["irc_db_username"], $db_config["irc_db_password"]);
+
+$username = DBH\getPrimaryKeyUsername($pdo_irc, $_SESSION["user_id"]);
+$pdo_irc = null;
+
+if (!$username) {
+    $username = getLan("error_get_username");
+}
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +38,7 @@ if (!isset($_SESSION["user_id"])) {
         <main>
             <div id="logout_container">
                 <p><?php echo getLan("logout_logged_in_as"); ?></p>
-                <p id="username_field">NIKDO</p> <!-- TO-DO -->
+                <p id="username_field"><?php echo $username; ?></p>
                 <a href="index.php"><?php echo getLan("logout_go_to_chat"); ?></a>
                 <button id="in_logout"><?php echo getLan("logout_log_out"); ?></button>
             </div>

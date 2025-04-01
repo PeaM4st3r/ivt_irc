@@ -41,7 +41,7 @@ div#chat {
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: baseline;
 }
 .chat_element_author p {
   margin: 2px 0;

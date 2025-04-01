@@ -24,6 +24,7 @@ body {
     height: 100vh;
 }
 
+// Credit for this retro effect style: https://codepen.io/lbebber/pen/XJRdrV/
 .retro-fx::before {
     content: " ";
     display: block;
@@ -39,7 +40,7 @@ body {
     linear-gradient(90deg, color.adjust(#ff0000, $alpha: -0.94),
         color.adjust(#00ff00, $alpha: -0.98),
         color.adjust(#0000ff, $alpha: -0.94));
-    background-size: 100% 3px, 4px 100%;
+    background-size: 100% 3px, 6px 100%;
 
     z-index: 1;
     pointer-events: none;

@@ -33,9 +33,13 @@ $langArray = [
     "error_create_acc_username_exists" => "Tvorba účtu selhala - toto uživatelské jméno se již používá!",
     "error_create_acc_failed" => "Tvorba účtu selhala! Zkuste to prosím znovu.",
     "succes_create_acc" => "Účet byl úspěšně vytvořen!",
+    "error_get_username" => "N/A",
 
     "error_internal_failure" => "Interní chyba serveru. Zkuste to prosím znovu.",
     "error_login_invalid_credentials" => "Přihlášení k účtu selhalo - neplatné přihlašovací údaje!",
+    "error_send_invalid_channel" => "Chyba při odesílání zprávy - neplatný kanál!",
+    "error_send_invalid_author" => "Chyba při odesílání zprávy - neplatný uživatel!",
+    "succes_send_message" => "Zpráva odeslána.",
     "succes_login" => "Přihlášení proběhlo úspěšně!",
     "succes_logout" => "Odhlášení proběhlo úspěšně!",
 ];

@@ -30,6 +30,23 @@ export async function fetchChatMessages() {
     return comm.fetchPostJSON(body, comm.urlRequestHandler);
 }
 
+/**
+ * Sends a new message to the server. Note that the user who's sending the message is handled server-side.
+ * @param {string} varMessage The message to be sent.
+ * @returns {Promise<any>|false}
+ */
+export async function sendChatMessage(varMessage) {
+    if (!varMessage) return false;
+
+    const body = {
+        command: "sendMessage",
+        channel: "institut",
+        message: varMessage
+    }
+
+    return comm.fetchPostJSON(body, comm.urlRequestHandler);
+}
+
 
 // MARK: Chat rendering
 /**
@@ -83,9 +100,9 @@ function fetchChatMessagesWrapper(chatContainer) {
  * The main chat update function. This should run in an interval.
  */
 export function main() {
-    const msgSignaturePromise =  fetchMessageSign();
+    const msgSignaturePromise = fetchMessageSign();
     const chatContainer = arguments[0];
-    if(!msgSignaturePromise) return;
+    if (!msgSignaturePromise) return;
 
     msgSignaturePromise.then((signature) => {
         if (localChatSignature == signature) return;

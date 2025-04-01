@@ -2,7 +2,7 @@
 namespace DBH;
 use PDO;
 use PDOException;
-
+use RequestStatus;
 
 // MARK: Constants
 
@@ -19,8 +19,13 @@ const QGET_LATEST_MESSAGE_IN_CHANNEL = "SELECT messages.msg_text, messages.time_
     ORDER BY messages.time_sent DESC
     LIMIT 1";
 
-/** Tries to find the specified username in the 'users' table. Returns either the user or his primary key. */
-const QGET_USERNAME = "SELECT users.username FROM users WHERE username = :queryUsername";
+/** Sends a message from the specified user to the specified channel with the sent-time being the current timestamp */
+const QSEND_MESSAGE_IN_CHANNEL = "INSERT INTO `messages` (`pk_id`, `time_sent`, `msg_text`, `fk_author`, `fk_channel`)
+    VALUES (NULL, current_timestamp(), :queryMessage, :queryAuthorPK,
+        (SELECT channels.pk_id FROM channels WHERE channels.channel_name = :channelName)
+    )";
+
+const QGET_PK_FROM_USERNAME = "SELECT users.username FROM users WHERE users.pk_id = :queryUserPK";
 const QGET_USERNAME_PK = "SELECT users.pk_id FROM users WHERE users.username = :queryUsername";
 
 const QINSERT_NEW_USER = "INSERT INTO users (`pk_id`, `username`, `password_hash`) 
@@ -39,7 +44,7 @@ const QGET_USER_PASS = "SELECT users.password_hash FROM users WHERE users.userna
  * @return PDO Upon successful connection, return a new PHP Database Object
  * @return false When the connection fails, logs the error to the log file and returns false
 */
-function connectToDB(string $dbServer, string $dbName, string $dbUser, #[\SensitiveParameter] ?string $dbPass): PDO|false
+function connectToDB(string $dbServer, string $dbName, string $dbUser, ?string $dbPass): PDO|false
 {
     try {
         $pdo = new PDO("mysql:host=$dbServer; dbname=$dbName", $dbUser, $dbPass);
@@ -61,7 +66,7 @@ function getChannelSignHash(PDO &$pdo, string $channelName): string {
     if(!$statement) return "";
     $statement->bindValue(":channelName", $channelName);
 
-    if(!$statement->execute() || !$statement->rowCount()) return "";
+    if(!$statement->execute()) return "";
     $queryData = $statement->fetchAll(PDO::FETCH_ASSOC);
     if(!$messageData = $queryData[0]) return "";
 
@@ -87,11 +92,39 @@ function getChatMessages(PDO &$pdo, string $channelName, int $messageOffset = 0,
     $statement->bindValue(":msgCount", (int)$msgCountNormalized, PDO::PARAM_INT);
     $statement->bindValue(":channelName", $channelName);
     
-    if (!$statement->execute() || !$statement->rowCount()) {
+    if (!$statement->execute()) {
         return array();
     }
 
     return $statement->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/** Sends a chat message to the specified channel from a specified author.
+ * @param PDO &$pdo The PDO.
+ * @param string $channelName The name of the channel to send the message to.
+ * @param int $author The message author's primary key.
+ * @param string $message The contents of the message.
+ * @return RequestStatus with the status of the operation.
+ */
+function sendChatMessage(PDO &$pdo, string $channelName, int $author, string $message): RequestStatus {
+    // Verifying author PK
+    $test_author_pk_statement = $pdo->prepare("SELECT users.username FROM users WHERE users.pk_id = :authorPK");
+    if (!$test_author_pk_statement) return RequestStatus::makeNewLanError("error_internal_failure");
+    $test_author_pk_statement->bindValue(":authorPK", (int)$author, PDO::PARAM_INT);
+
+    if (!$author || !$test_author_pk_statement->execute() || !$test_author_pk_statement->fetchColumn()) {
+        return RequestStatus::makeNewLanError("error_send_invalid_author");
+    }
+
+    // Sending message
+    $statement = $pdo->prepare(QSEND_MESSAGE_IN_CHANNEL);
+    if (!$statement) return RequestStatus::makeNewLanError("error_internal_failure");
+    $statement->bindValue(":queryMessage", $message);
+    $statement->bindValue(":queryAuthorPK", (int)$author, PDO::PARAM_INT);
+    $statement->bindValue(":channelName", $channelName);
+
+    if (!$statement->execute()) return RequestStatus::makeNewLanError("error_send_invalid_channel");
+    return RequestStatus::makeNewLanSuccess("succes_send_message");
 }
 
 /** Returns true if the username exists within the 'users' table, otherwise returns false.
@@ -101,15 +134,15 @@ function getChatMessages(PDO &$pdo, string $channelName, int $messageOffset = 0,
  * the query fails.
  */
 function findUsername(PDO &$pdo, string $username, bool $returnPK = false) {
-    $statement = $pdo->prepare($returnPK ? QGET_USERNAME_PK : QGET_USERNAME);
+    $statement = $pdo->prepare(QGET_USERNAME_PK);
     if (!$statement) return false; // This could be problematic in the future... who cares!
     $statement->bindValue(":queryUsername", $username);
 
-    if (!$statement->execute() || !$statement->rowCount()) { // Same thing with the execute() method here
+    if (!$statement->execute()) { // Same thing with the execute() method here
         return false;
     }
 
-    return ($returnPK ? (int)$statement->fetchAll(PDO::FETCH_ASSOC)[0]["pk_id"] : true);
+    return ($returnPK ? (int)$statement->fetchAll(PDO::FETCH_ASSOC)[0]["pk_id"] : ($statement->fetchColumn() ? true : false));
 }
 
 /** Tests if the password for the provided username checks out with the password set in the database.
@@ -127,11 +160,12 @@ function testUserCredentials(PDO &$pdo, string $username, string $password) {
     if (!$statement) return false;
     $statement->bindValue(":queryUsername", $username);
 
-    if (!$statement->execute() || !$statement->rowCount()) {
+    if (!$statement->execute()) {
         return false;
     }
 
     $databasePassHash = $statement->fetchAll(PDO::FETCH_ASSOC)[0]["password_hash"];
+    if (!$databasePassHash) return false;
     return password_verify($password, $databasePassHash);
 }
 
@@ -153,4 +187,18 @@ function createNewUser(PDO &$pdo, string $username, string $passwordHash) {
     }
 
     return true;
+}
+
+/** Returns the username from the 'users' table that's associated with the supplied primary key.
+ * @param PDO &$pdo The PDO.
+ * @param int $userPrimaryKey The primary key to search for.
+ * @return string|false the username on success or FALSE when the query fails or no username is found.
+ */
+function getPrimaryKeyUsername(PDO &$pdo, int $userPrimaryKey) {
+    $statement = $pdo->prepare(QGET_PK_FROM_USERNAME);
+    if (!$statement) return false;
+    $statement->bindValue(":queryUserPK", $userPrimaryKey);
+
+    if (!$statement->execute()) return false;
+    return $statement->fetch(PDO::FETCH_ASSOC)["username"];
 }

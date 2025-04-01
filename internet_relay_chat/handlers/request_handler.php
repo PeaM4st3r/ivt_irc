@@ -40,6 +40,10 @@ switch ($requestData["command"]) {
     case "createAccount":
         $responseData = USRH\createAccount($pdo_irc, $requestData["username"], $requestData["password"])->getArray();
         break;
+    case "sendMessage":
+        $authorPK = ($_SESSION["user_id"] ?? 0);
+        $responseData = DBH\sendChatMessage($pdo_irc, $requestData["channel"], $authorPK, $requestData["message"])->getArray();
+        break;
     default:
         $responseData = RequestStatus::makeNewError("Invalid command received!");
         break;

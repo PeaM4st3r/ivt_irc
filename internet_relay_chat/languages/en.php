@@ -33,9 +33,13 @@ $langArray = [
     "error_create_acc_username_exists" => "Account creation failed - this username is already in use!",
     "error_create_acc_failed" => "Account creation failed! Please try again.",
     "succes_create_acc" => "User account created successfully!",
+    "error_get_username" => "N/A",
 
     "error_internal_failure" => "Internal server fault. Please try again.",
     "error_login_invalid_credentials" => "Logging in failed - invalid account credentials!",
+    "error_send_invalid_channel" => "Failed to send message - invalid channel!",
+    "error_send_invalid_author" => "Failed to send message - invalid user!",
+    "succes_send_message" => "Message sent.",
     "succes_login" => "Successfully logged in!",
     "succes_logout" => "Successfully logged out!",
 ];
