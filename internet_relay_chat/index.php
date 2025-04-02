@@ -2,6 +2,7 @@
 require ".\\handlers\\common.php";
 define("MAIN_LABEL", "Internet Relay Chat - " . getLan("title_index"));
 define("NAV_LOGIN", getLan("nav_user_account"));
+//$mainElementClass = (isset($_SESSION["user_id"]) ? "" : "no_user");
 
 ?>
 
