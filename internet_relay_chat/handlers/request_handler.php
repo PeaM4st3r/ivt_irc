@@ -19,11 +19,17 @@ $db_config = parse_ini_file("./../irc_cfg.ini");
 $pdo_irc = DBH\connectToDB($db_config["irc_db_server"], $db_config["irc_db_name"],
     $db_config["irc_db_username"], $db_config["irc_db_password"]);
 
+if (!$pdo_irc) {
+    $responseData = RequestStatus::makeNewLanError("error_failed_to_contact_database")->getArray();
+    echo json_encode($responseData);
+    exit();
+}
+
 
 // TO-DO: add $requestData sanitization (mainly null-checking)
 switch ($requestData["command"]) {
-    case "getSign": // Returns the signature of the current channel.
-        $responseData = DBH\getChannelSignHash($pdo_irc, $requestData["channel"]);
+    case "getSign":
+        $responseData = DBH\getChannelSignHash($pdo_irc, $requestData["channel"])->getArray();
         break;
     case "getChat": // Returns an associative array of chat messages in the current channel.
         $responseData = DBH\getChatMessages($pdo_irc, $requestData["channel"], $requestData["offset"]);

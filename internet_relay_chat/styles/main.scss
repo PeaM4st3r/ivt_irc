@@ -74,6 +74,7 @@ div#chat {
 // Message input
 div#message_input_container {
     display: flex;
+    position: relative;
     height: 50px;
 
     textarea#message_input {
@@ -119,4 +120,34 @@ div#message_input_container {
             background-color: $background_input_focus;
         }
     }
+
+    .login_popup:not(.hidden) {
+        @include hover-blink-anim("opacity_blink", "opacity", 0, 1);
+
+        display: block;
+        visibility: visible;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        top: 0;
+        margin: 4px 3px;
+        padding: 0 3px;
+
+        background: repeating-linear-gradient(135deg,
+            rgba($background_error, 0.7) 0, rgba($background_error, 0.7) 20px,
+            rgba($background_dark, 0.7) 20px, rgba($background_dark, 0.7) 40px);
+        color: $text_white;
+        font-weight: bold;
+
+        animation: opacity_blink 0.25s step-end;
+        animation-fill-mode: forwards;
+    }
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    display: none;
+    animation: none;
 }

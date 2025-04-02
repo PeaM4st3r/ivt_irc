@@ -118,7 +118,8 @@ header {
   flex: 0 1;
   height: 50px;
   justify-content: center;
-  align-items: baseline;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 header h1 {
   flex: 6;
@@ -127,20 +128,18 @@ header h1 {
   height: inherit;
 }
 header a {
-  display: block;
   max-width: -moz-max-content;
   max-width: max-content;
-  flex: 1;
-  margin: 0 8px 0 0;
+  display: block;
+  margin: 0 4px 0 0;
   font-size: 1.4rem;
 }
 header p#clock {
-  flex: 1;
   display: flex;
-  justify-content: center;
+  box-sizing: border-box;
   align-items: center;
   margin: 0;
-  padding: 0 0 0 8px;
+  padding: 0 4px 0 4px;
   height: inherit;
   border-left: 4px solid rgb(40, 41, 43);
   border-right: 4px solid rgb(40, 41, 43);

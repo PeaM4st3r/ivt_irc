@@ -110,7 +110,8 @@ header {
     height: 50px;
 
     justify-content: center;
-    align-items: baseline;
+    align-items: center;
+    flex-wrap: nowrap;
     
     h1 {
         flex: 6;
@@ -121,21 +122,19 @@ header {
     }
 
     a {
-        display: block;
         max-width: max-content;
-        flex: 1;
-        margin: 0 8px 0 0;
+        display: block;
+        margin: 0 4px 0 0;
         font-size: 1.4rem;
     }
 
     p#clock {
-        flex: 1;
         display: flex;
-        justify-content: center;
+        box-sizing: border-box;
         align-items: center;
 
         margin: 0;
-        padding: 0 0 0 8px;
+        padding: 0 4px 0 4px;
         height: inherit;
         border-left: 4px solid $border_main;
         border-right: 4px solid $border_main;

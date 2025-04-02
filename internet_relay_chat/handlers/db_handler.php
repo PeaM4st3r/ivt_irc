@@ -61,17 +61,19 @@ function connectToDB(string $dbServer, string $dbName, string $dbUser, ?string $
  * @param string $channelName The name of the channel to get the signature from. This name must be exact!
  * @return string an sha256 hash upon success, otherwise returns an empty string.
  */
-function getChannelSignHash(PDO &$pdo, string $channelName): string {
+function getChannelSignHash(PDO &$pdo, string $channelName): RequestStatus {
     $statement = $pdo->prepare(QGET_LATEST_MESSAGE_IN_CHANNEL);
-    if(!$statement) return "";
+    if(!$statement) return RequestStatus::makeNewLanError();
     $statement->bindValue(":channelName", $channelName);
 
-    if(!$statement->execute()) return "";
+    if(!$statement->execute()) return RequestStatus::makeNewLanError();
     $queryData = $statement->fetchAll(PDO::FETCH_ASSOC);
-    if(!$messageData = $queryData[0]) return "";
+    if(!$messageData = $queryData[0]) return RequestStatus::makeNewLanError();
 
     $sign = hash("sha256", sprintf("%s/%s", $messageData["time_sent"], $messageData["msg_text"]));
-    return $sign;
+    $response = RequestStatus::makeNewSuccess("Current channel signature.");
+    $response->setData($sign);
+    return $response;
 }
 
 /** Gets the messages in the provided chat channel. Can set a message limit and message offset to load older messages.
