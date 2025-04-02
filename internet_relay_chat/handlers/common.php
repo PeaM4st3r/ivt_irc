@@ -110,7 +110,7 @@ final class RequestStatus {
      * @param string $langToken The token to use for the error message.
      * @return RequestStatus
      */
-    public static function makeNewLanError(string $langToken) {
+    public static function makeNewLanError(string $langToken = "error_internal_failure") {
         return new RequestStatus(false, getLan($langToken));
     }
 }

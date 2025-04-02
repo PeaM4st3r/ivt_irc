@@ -34,8 +34,11 @@ $langArray = [
     "error_create_acc_failed" => "Tvorba účtu selhala! Zkuste to prosím znovu.",
     "succes_create_acc" => "Účet byl úspěšně vytvořen!",
     "error_get_username" => "N/A",
+    "chat_error_no_user" => "K chatování se musíte přihlásit!",
+    "chat_error_server" => "Chyba spojení se serverem!",
 
     "error_internal_failure" => "Interní chyba serveru. Zkuste to prosím znovu.",
+    "error_failed_to_contact_database" => "Serveru se nepodařilo připojit k databázi. Zkuste to prosím později.",
     "error_login_invalid_credentials" => "Přihlášení k účtu selhalo - neplatné přihlašovací údaje!",
     "error_send_invalid_channel" => "Chyba při odesílání zprávy - neplatný kanál!",
     "error_send_invalid_author" => "Chyba při odesílání zprávy - neplatný uživatel!",

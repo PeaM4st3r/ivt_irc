@@ -49,7 +49,11 @@ define("NAV_LOGIN", getLan("nav_user_account"));
                 <div id="message_input_container">
                     <textarea id="message_input" name="message_input_field"
                         placeholder='<?php echo getLan("message_input_placeholder")?>'></textarea>
-                    <button type="submit" id="b_chat_send"><?php echo getLan("button_send_message");?></button>
+                    <button type="submit" id="b_chat_send">
+                        <?php echo getLan("button_send_message");?></button>
+                    <div id="input_popup_container" class="login_popup hidden">
+                        <span id="input_popup_text"><?php echo getLan("chat_error_no_user"); ?></span>
+                    </div>
                 </div>
             </div>
         </main>

@@ -97,14 +97,45 @@ function fetchChatMessagesWrapper(chatContainer) {
 
 
 /**
+ * Updates the chat input status text for notifying the user of errors during chatting.
+ * @param {HTMLElement} container The input status container.
+ * @param {boolean} show Shows or hides the status element.
+ * @param {string} message The message to show when the element is shown.
+ * @returns void
+ */
+export function updateChatInputText(container, show = false, message = "N/A") {
+    if (!container) return;
+    const childSpan = container.children[0];
+
+    if (!show) {
+        container.setAttribute("class", "login_popup hidden");
+    }
+
+    container.setAttribute("class", "login_popup");
+    childSpan.innerHTML = message;
+}
+
+
+/**
  * The main chat update function. This should run in an interval.
  */
 export function main() {
     const msgSignaturePromise = fetchMessageSign();
     const chatContainer = arguments[0];
+    const chatInputStatus = arguments[1];
     if (!msgSignaturePromise) return;
 
-    msgSignaturePromise.then((signature) => {
+    msgSignaturePromise.then((response) => {
+        // Testing response
+        if (!response.ok) {
+            updateChatInputText(chatInputStatus, true, response.message);
+            return;
+        }
+        let signature = response.data;
+
+        // Testing, if user is logged in
+
+        // Updating chat signature & content
         if (localChatSignature == signature) return;
         localChatSignature = signature;
         console.log("Updating chat - new signature: " + signature);
