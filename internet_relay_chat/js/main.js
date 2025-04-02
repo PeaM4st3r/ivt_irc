@@ -14,14 +14,17 @@ chatButtonSendMessage.addEventListener("click", () => {
     if (!response) return;
 
     response.then((data) => {
+        chatMessageInput.value = "";
+
         if (data.ok) {
-            chatMessageInput.value = "";
             chat.main(chatContainer);
             chat.updateChatInputText(chatInputPopup, false);
+            chat.setExternalError(false);
             return;
         }
 
-        chat.updateChatInputText(chatInputPopup, true, data.message);       
+        chat.updateChatInputText(chatInputPopup, true, data.message);
+        chat.setExternalError(true);
     });
 });
 
@@ -29,5 +32,6 @@ chatButtonSendMessage.addEventListener("click", () => {
 //Updating the chat
 const chatContainer = document.getElementById("chat");
 chat.main(chatContainer, chatInputPopup);
+chat.setExternalError(false);
 
-setInterval(chat.main, 2500, chatContainer);
+setInterval(chat.main, 3000, chatContainer);

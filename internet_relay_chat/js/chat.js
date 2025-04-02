@@ -1,5 +1,7 @@
 import * as comm from "./communication.js";
-var localChatSignature = 0;
+let localChatSignature = "none";
+let externalError = false;
+let lang = document.documentElement.lang;
 
 
 // MARK: Server communication
@@ -87,6 +89,14 @@ function fetchChatMessagesWrapper(chatContainer) {
             second: "2-digit"
         };
 
+        if (!messages.length) {
+            const sysDate = new Date();
+            const dateString = sysDate.toLocaleString("en-GB", chatMessageFormat);
+            chatContainer.appendChild(createChatElement("system", dateString, (lang == "cs" ?
+                "Zatím žádné zprávy... napiště nějakou!" : "No messages so far... write one!")));
+            return;
+        }
+
         messages.forEach(message => {
             const msgDatetime = new Date(message["time_sent"]);
             const msgDateFormatted = msgDatetime.toLocaleString("en-GB", chatMessageFormat);
@@ -109,10 +119,19 @@ export function updateChatInputText(container, show = false, message = "N/A") {
 
     if (!show) {
         container.setAttribute("class", "login_popup hidden");
+        return;
     }
 
     container.setAttribute("class", "login_popup");
     childSpan.innerHTML = message;
+}
+
+/**
+ * Used for setting external error flags from different modules.
+ * @param {boolean} bool
+ */
+export function setExternalError(bool = false) {
+    externalError = bool;
 }
 
 
@@ -127,13 +146,15 @@ export function main() {
 
     msgSignaturePromise.then((response) => {
         // Testing response
-        if (!response.ok) {
+        if (!response.ok & response.data == null) {
             updateChatInputText(chatInputStatus, true, response.message);
             return;
         }
         let signature = response.data;
 
-        // Testing, if user is logged in
+        if (!externalError) {
+            updateChatInputText(chatInputStatus, false);
+        }
 
         // Updating chat signature & content
         if (localChatSignature == signature) return;

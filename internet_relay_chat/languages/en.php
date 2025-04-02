@@ -22,7 +22,7 @@ $langArray = [
     "login_disclaimer_list_1" => "There is <b>no encryption</b> between the client and the server;",
     "login_disclaimer_list_2" => "The server does not support HTTPS (see first bullet);",
     "login_disclaimer_list_3" => "The password sent to the server is in <b>plain text</b>;",
-    "login_disclaimer_list_4" => "The server database saves your password as a hash.",
+    "login_disclaimer_list_4" => "There are definitely <b>even more</b> security threats that I can't think of!",
     "login_disclaimer_based_on" => "Based on these facts, it's <b>strongly</b> recommended that you <b>don't input</b> any sensitivite information.",
     "login_disclaimer_no_responsibility" => "The author is not responsible for any damages caused by your ignorance.",
 
@@ -34,8 +34,10 @@ $langArray = [
     "error_create_acc_failed" => "Account creation failed! Please try again.",
     "succes_create_acc" => "User account created successfully!",
     "error_get_username" => "N/A",
+    "chat_error_server" => "Failed to connect to the server!",
 
     "error_internal_failure" => "Internal server fault. Please try again.",
+    "error_failed_to_contact_database" => "The server couldn't connect to the database. Please try again later.",
     "error_login_invalid_credentials" => "Logging in failed - invalid account credentials!",
     "error_send_invalid_channel" => "Failed to send message - invalid channel!",
     "error_send_invalid_author" => "Failed to send message - invalid user!",

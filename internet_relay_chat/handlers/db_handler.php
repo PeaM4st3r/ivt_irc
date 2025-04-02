@@ -63,13 +63,18 @@ function connectToDB(string $dbServer, string $dbName, string $dbUser, ?string $
  */
 function getChannelSignHash(PDO &$pdo, string $channelName): RequestStatus {
     $statement = $pdo->prepare(QGET_LATEST_MESSAGE_IN_CHANNEL);
-    if(!$statement) return RequestStatus::makeNewLanError();
+    if (!$statement) return RequestStatus::makeNewLanError();
     $statement->bindValue(":channelName", $channelName);
 
-    if(!$statement->execute()) return RequestStatus::makeNewLanError();
+    if (!$statement->execute()) return RequestStatus::makeNewLanError();
     $queryData = $statement->fetchAll(PDO::FETCH_ASSOC);
-    if(!$messageData = $queryData[0]) return RequestStatus::makeNewLanError();
+    if (!isset($queryData[0])) {
+        $response = RequestStatus::makeNewLanError();
+        $response->setData("none");
+        return $response;
+    }
 
+    $messageData = $queryData[0];
     $sign = hash("sha256", sprintf("%s/%s", $messageData["time_sent"], $messageData["msg_text"]));
     $response = RequestStatus::makeNewSuccess("Current channel signature.");
     $response->setData($sign);

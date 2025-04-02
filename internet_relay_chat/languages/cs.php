@@ -18,11 +18,11 @@ $langArray = [
     "login_label_password" => "Heslo",
 
     "login_disclaimer_warning" => "Upozornění!",
-    "login_disclaimer_before" => "Před zadáváním <b>jakýchkoli</b> údajů zvažte následující:",
+    "login_disclaimer_before" => "Před zadáváním <b>jakýchkoliv</b> údajů zvažte následující:",
     "login_disclaimer_list_1" => "Mezi klientem a serverem není <b>žádné</b> šifrování;",
     "login_disclaimer_list_2" => "Server nepodporuje HTTPS (viz první bod);",
     "login_disclaimer_list_3" => "Heslo, které odešlete serveru, je v požadavku <b>prostý text</b>;",
-    "login_disclaimer_list_4" => "Serverová databáze ukládá Vaše heslo jako hash.",
+    "login_disclaimer_list_4" => "Existuje pravděpodobně <b>ještě více</b> bezpečnostních hrozeb, o kterých ani nevím!",
     "login_disclaimer_based_on" => "Na základě těchto faktů je Vám <b>silně</b> doporučeno <b>nezadávat</b> jakékoliv citlivé informace.",
     "login_disclaimer_no_responsibility" => "Autor neručí za jakékoliv škody způsobené Vaší ignorancí.",
 
@@ -34,7 +34,6 @@ $langArray = [
     "error_create_acc_failed" => "Tvorba účtu selhala! Zkuste to prosím znovu.",
     "succes_create_acc" => "Účet byl úspěšně vytvořen!",
     "error_get_username" => "N/A",
-    "chat_error_no_user" => "K chatování se musíte přihlásit!",
     "chat_error_server" => "Chyba spojení se serverem!",
 
     "error_internal_failure" => "Interní chyba serveru. Zkuste to prosím znovu.",
